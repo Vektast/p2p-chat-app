@@ -2,7 +2,7 @@
 
 A lightweight, browser-based peer-to-peer chat and file sharing application that enables direct communication between users without relying on centralized servers for data exchange.
 
-![P2P Chat Application](https://via.placeholder.com/800x400?text=P2P+Chat+Application)
+![P2P Chat Application](https://imgur.com/a/7ph1HDU)
 
 ## Features
 
@@ -11,7 +11,7 @@ A lightweight, browser-based peer-to-peer chat and file sharing application that
 - **WebRTC Technology**: Secure, encrypted connections
 - **Mobile Support**: Responsive design works on smartphones and tablets
 - **No Data Routing**: Messages and files are transmitted directly between peers
-- **Hungarian Interface**: Multi-language support
+- **English Interface**: Multi-language support
 - **Automatic Peer Discovery**: Easy connection to other users
 - **No Account Required**: Generate random names for quick access
 
