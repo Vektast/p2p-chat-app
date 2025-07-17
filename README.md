@@ -2,7 +2,8 @@
 
 A lightweight, browser-based peer-to-peer chat and file sharing application that enables direct communication between users without relying on centralized servers for data exchange.
 
-![P2P Chat Application](https://imgur.com/a/7ph1HDU)
+
+![alt text](https://imgur.com/a/7ph1HDU)
 
 ## Features
 
