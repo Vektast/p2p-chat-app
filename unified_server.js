@@ -126,7 +126,7 @@ wss.on('connection', (ws, req) => {
     
     clients.set(clientId, ws);
 
-    console.log(`Új kliens csatlakozott: ${clientId} (Összesen: ${clients.size})`);
+    console.log(`New client connected: ${clientId} (Total: ${clients.size})`);
 
     // Send client their own ID
     ws.send(JSON.stringify({ type: 'id', id: clientId }));
@@ -154,19 +154,19 @@ wss.on('connection', (ws, req) => {
                 if (message.data && message.data.candidate) payloadToSend.candidate = message.data.candidate;
                 if (message.data && message.data.name) payloadToSend.name = message.data.name;
 
-                console.log(`Továbbítás ${clientId}-tól -> ${message.dest}-nek`);
+                console.log(`Forwarding from ${clientId} -> ${message.dest}`);
                 targetClient.send(JSON.stringify(payloadToSend));
             } else {
-                console.log(`Célkliens (${message.dest}) nem található vagy nem nyitott.`);
+                console.log(`Target client (${message.dest}) not found or not open.`);
             }
         } else {
-            console.log(`Ismeretlen formátumú üzenet ${clientId}-tól, 'dest' nélkül:`, message);
+            console.log(`Unknown message format from ${clientId}, without 'dest':`, message);
         }
     });
 
     ws.on('close', () => {
         clients.delete(clientId);
-        console.log(`Kliens (${clientId}) lecsatlakozott. Maradt: ${clients.size}`);
+        console.log(`Client (${clientId}) disconnected. Remaining: ${clients.size}`);
         
         // Notify other clients about disconnection
         clients.forEach(client => {
@@ -177,12 +177,12 @@ wss.on('connection', (ws, req) => {
     });
 
     ws.on('error', (err) => {
-        console.error(`Hiba a klienssel (${clientId}):`, err.message);
+        console.error(`Error with client (${clientId}):`, err.message);
     });
 });
 
 wss.on('error', (err) => {
-    console.error('WebSocket szerver hiba:', err);
+    console.error('WebSocket server error:', err);
 });
 
 // Start the unified server with port management
@@ -213,7 +213,7 @@ startServer();
 
 // Graceful shutdown handling
 process.on('SIGINT', () => {
-    console.log('\n🛑 Szerver leállítása...');
+    console.log('\n🛑 Shutting down server...');
     
     // Close all WebSocket connections
     clients.forEach(client => {
@@ -224,13 +224,13 @@ process.on('SIGINT', () => {
     
     // Close WebSocket server
     wss.close(() => {
-        console.log('✅ WebSocket szerver leállítva');
+        console.log('✅ WebSocket server stopped');
     });
     
     // Close HTTP server
     server.close(() => {
-        console.log('✅ HTTP szerver leállítva');
-        console.log('👋 Viszlát!');
+        console.log('✅ HTTP server stopped');
+        console.log('👋 Goodbye!');
         process.exit(0);
     });
 });

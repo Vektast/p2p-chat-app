@@ -1,19 +1,19 @@
 <!DOCTYPE html>
-<html lang="hu">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Modern P2P Csevegő & Fájlmegosztó</title>
+    <title>Modern P2P Chat & File Sharing</title>
     <style>
-        /* Alap stílusok és modernizálás */
+        /* Base styles and modernization */
         :root {
             --primary-color: #007bff;
             --secondary-color: #6c757d;
             --success-color: #28a745;
             --danger-color: #dc3545;
             --warning-color: #ffc107;
-            /* Sárgásabb, jobban látszik a szöveg */
+            /* More yellowish, better text visibility */
             --info-color: #17a2b8;
             --light-color: #f8f9fa;
             --dark-color: #343a40;
@@ -45,7 +45,7 @@
             margin: 20px auto;
             background-color: #fff;
             padding: 20px;
-            /* Kicsit kevesebb, a section-öknek lesz saját paddingje */
+            /* A bit less, sections will have their own padding */
             border-radius: var(--border-radius);
             box-shadow: var(--box-shadow);
         }
@@ -100,7 +100,7 @@
         }
 
         .peer-list #peersContainer p {
-            /* A "Nincsenek társak" üzenethez */
+            /* For "No peers available" message */
             color: var(--muted-text-color);
             font-style: italic;
         }
@@ -142,7 +142,7 @@
             background-color: #138496;
         }
 
-        /* Üzenetek stílusa */
+        /* Message styles */
         .chat-log {
             max-height: 450px;
             overflow-y: auto;
@@ -151,7 +151,7 @@
             border-radius: var(--border-radius);
             background-color: #fdfdfd;
             margin-bottom: 20px;
-            /* Térköz az input terület előtt */
+            /* Space before input area */
         }
 
         .message {
@@ -163,7 +163,7 @@
             box-shadow: var(--box-shadow-sm);
             line-height: 1.4;
             max-width: 80%;
-            /* Alapértelmezett max szélesség */
+            /* Default max width */
         }
 
         .message.fade-out {
@@ -192,7 +192,7 @@
         }
 
         .message .content strong {
-            /* Fájlnév kiemelése */
+            /* Filename highlight */
             color: var(--dark-color);
         }
 
@@ -203,9 +203,9 @@
             border-radius: var(--border-radius);
             margin-top: 8px;
             height: 22px;
-            /* Növelt magasság */
+            /* Increased height */
             overflow: hidden;
-            /* Fontos a belső bar radiushoz */
+            /* Important for inner bar radius */
         }
 
         .message .progress-bar {
@@ -213,7 +213,7 @@
             height: 100%;
             background-color: var(--success-color);
             border-radius: var(--border-radius);
-            /* Lehet, hogy csak a bal oldali kell, ha a konténernek is van */
+            /* Maybe only left side is needed if container has radius too */
             text-align: center;
             line-height: 22px;
             color: white;
@@ -225,7 +225,7 @@
         }
 
         .message .actions button {
-            /* Fájl elfogadás/elutasítás gombok */
+            /* File accept/reject buttons */
             margin-left: 5px;
             margin-top: 8px;
             padding: 5px 10px;
@@ -283,7 +283,7 @@
 
         .my-message {
             background-color: #cfe2ff;
-            /* Világosabb, telítettebb kék */
+            /* Lighter, more saturated blue */
             margin-left: auto;
             border-bottom-right-radius: 0;
         }
@@ -292,11 +292,11 @@
             color: #052c65;
         }
 
-        /* Sötétebb kék a kontrasztért */
+        /* Darker blue for contrast */
 
         .their-message {
             background-color: #e9ecef;
-            /* Kicsit sötétebb szürke */
+            /* Slightly darker gray */
             margin-right: auto;
             border-bottom-left-radius: 0;
         }
@@ -308,15 +308,15 @@
         .system-message {
             background-color: var(--warning-color);
             color: #4d3800;
-            /* Sötétebb sárga szöveg */
+            /* Darker yellow text */
             border: 1px solid #ffb000;
             text-align: center;
             font-size: 0.9em;
             padding: 8px;
             max-width: 100%;
-            /* Teljes szélességű */
+            /* Full width */
             border-radius: var(--border-radius);
-            /* Egységes */
+            /* Uniform */
         }
 
         .file-transfer-message {
@@ -324,7 +324,7 @@
         }
 
         .file-transfer-message .content .status-text {
-            /* Kész, Hiba stb. */
+            /* Done, Error etc. */
             font-style: italic;
             font-size: 0.9em;
             color: var(--muted-text-color);
@@ -332,12 +332,12 @@
         }
 
 
-        /* Input terület */
+        /* Input area */
         .input-area {
             display: flex;
             gap: 10px;
             align-items: stretch;
-            /* Gombok és input azonos magasságúak legyenek */
+            /* Buttons and input should have the same height */
         }
 
         #messageInput {
@@ -356,13 +356,13 @@
 
         #recipientSelect {
             padding: 10px;
-            /* Kisebb, ha csak ID-k vannak */
+            /* Smaller if only IDs */
             border: 1px solid var(--border-color);
             border-radius: var(--border-radius);
             background-color: white;
             font-size: 1em;
             min-width: 150px;
-            /* Minimális szélesség, hogy ne legyen túl kicsi */
+            /* Minimum width so it's not too small */
         }
 
         #sendButton,
@@ -376,7 +376,7 @@
             font-size: 1em;
             font-weight: 500;
             white-space: nowrap;
-            /* Ne törjön a gomb szövege */
+            /* Don't break button text */
             transition: background-color 0.2s ease;
         }
 
@@ -390,7 +390,7 @@
             display: none;
         }
 
-        /* Reszponzivitás az input területhez */
+        /* Responsiveness for input area */
         @media (max-width: 768px) {
             .container {
                 padding: 15px;
@@ -430,21 +430,21 @@
             }
 
             #recipientSelect+#messageInput {
-                /* Ha a select látható, akkor legyen alatta is térköz */
+                /* If select is visible, add space below it */
                 margin-top: 0;
-                /* De ha a select rejtett, ne legyen felesleges térköz */
+                /* But if select is hidden, don't add unnecessary space */
             }
 
             #sendButton,
             #sendBroadcastButton {
                 margin-bottom: 0;
-                /* Utolsó elemnek nem kell alsó margó a csoporton belül */
+                /* Last element doesn't need bottom margin in the group */
             }
 
             #sendButton:not(.hidden) {
-                /* Ha a sendButton látható */
+                /* If sendButton is visible */
                 margin-bottom: 10px;
-                /* Akkor legyen alatta térköz a broadcast gomb előtt */
+                /* Then add space before broadcast button */
             }
         }
 
@@ -538,37 +538,36 @@
 
 <body>
     <div class="container">
-        <h1>Modern P2P Csevegő & Fájlmegosztó</h1>
+        <h1>Modern P2P Chat & File Sharing</h1>
 
         <div class="app-info section">
-            <p>Saját neved: <span id="myName">Generálás...</span> (<span id="myPeerId"></span>)</p>
-            <p>Szignál szerver: <code id="signalingServerAddress">ws://192.168.0.251:8080</code></p>
-            <p style="font-size:0.9em; color: var(--muted-text-color);">Az üzenetek és fájlok közvetlenül a társak
-                között (P2P) közlekednek a kapcsolat felépítése után.</p>
+            <p>Your name: <span id="myName">Generating...</span> (<span id="myPeerId"></span>)</p>
+            <p>Signaling server: <code id="signalingServerAddress">ws://192.168.0.251:8080</code></p>
+            <p style="font-size:0.9em; color: var(--muted-text-color);">Messages and files are transmitted directly between peers (P2P) after the connection is established.</p>
             <div class="auto-accept-files">
                 <label class="toggle-switch">
                     <input type="checkbox" id="autoAcceptFiles" checked>
                     <span class="toggle-slider"></span>
                 </label>
-                <span>Fájlok automatikus elfogadása</span>
+                <span>Auto-accept files</span>
             </div>
         </div>
 
         <div class="peer-list section">
-            <h2>Elérhető társak:</h2>
+            <h2>Available Peers:</h2>
             <div id="peersContainer">
-                <p>Jelenleg nincsenek elérhető társak.</p>
+                <p>No peers available at the moment.</p>
             </div>
         </div>
 
         <div class="chat-container section">
-            <h2>Csevegés és Fájlátvitel:</h2>
+            <h2>Chat and File Transfer:</h2>
             <div id="messages" class="chat-log"></div>
             <div class="input-area">
                 <select id="recipientSelect" class="hidden"></select>
-                <input type="text" id="messageInput" placeholder="Üzenet...">
-                <button id="sendButton" class="hidden">Küldés neki</button>
-                <button id="sendBroadcastButton">Küldés mindenkinek</button>
+                <input type="text" id="messageInput" placeholder="Message...">
+                <button id="sendButton" class="hidden">Send to Selected</button>
+                <button id="sendBroadcastButton">Send to Everyone</button>
             </div>
         </div>
     </div>
@@ -593,7 +592,7 @@
         // Save auto-accept preference when changed
         autoAcceptFilesToggle.addEventListener('change', function() {
             localStorage.setItem('autoAcceptFiles', this.checked);
-            console.log(`Fájlok automatikus elfogadása: ${this.checked ? 'bekapcsolva' : 'kikapcsolva'}`);
+            console.log(`Auto-accept files: ${this.checked ? 'enabled' : 'disabled'}`);
         });
 
         let myRandomName = generateRandomName();
@@ -659,8 +658,8 @@
         const ws = new WebSocket(SIGNALING_SERVER_URL);
 
         ws.onopen = () => {
-            console.log("Csatlakozva a szignál szerverhez.");
-            displayMessage('SYSTEM', `Sikeres csatlakozás a szignál szerverhez (${SIGNALING_SERVER_URL})`, 'system-message');
+            console.log("Connected to signaling server.");
+            displayMessage('SYSTEM', `Successfully connected to signaling server (${SIGNALING_SERVER_URL})`, 'system-message');
         };
 
         ws.onmessage = async (event) => {
@@ -671,7 +670,7 @@
                 case 'id':
                     localPeerId = message.id;
                     myPeerIdSpan.textContent = `ID: ${localPeerId}`;
-                    console.log("Saját Peer ID a szignál szervertől:", localPeerId);
+                    console.log("Own Peer ID from signaling server:", localPeerId);
                     break;
                 case 'discover':
                     if (message.id && message.id !== localPeerId) {
@@ -681,7 +680,7 @@
 
                         // Initialize peer name as "Connecting..." until we get the actual name
                         if (!peerNames[message.id]) {
-                            peerNames[message.id] = `Csatlakozás... (${message.id.substring(0, 6)})`;
+                            peerNames[message.id] = `Connecting... (${message.id.substring(0, 6)})`;
                         }
 
                         // Use enhanced peer discovery for mobile-to-mobile connections
@@ -691,9 +690,9 @@
                         updatePeersList();
                     }
                     break;
-                case 'request': // simple-webrtc-p2p-signaling 'request' üzenete
+                case 'request': // simple-webrtc-p2p-signaling 'request' message
                     if (message.data && message.data.sdp && message.data.sdp.type === 'offer' && message.id !== localPeerId) {
-                        const offerSenderName = message.data.name || 'Ismeretlen Peer';
+                        const offerSenderName = message.data.name || 'Unknown Peer';
                         const deviceType = message.data.deviceType || 'unknown';
                         const attempt = message.data.attempt || 1;
                         peerNames[message.id] = offerSenderName;
@@ -705,20 +704,20 @@
                         await handleOffer(message.id, message.data.sdp, offerSenderName, deviceType, attempt);
                     }
                     break;
-                default: // SDP (offer/answer) vagy ICE candidate egy ismert remoteId-től
+                default: // SDP (offer/answer) or ICE candidate from a known remoteId
                     if (remoteId && remoteId !== localPeerId) {
-                        if (message.sdp && message.sdp.type === 'offer') { // Ezt a részt a 'request' kezeli a simple-webrtc-p2p-signaling esetén
-                            const offerSenderName = message.name || (message.data && message.data.name) || 'Ismeretlen Peer';
+                        if (message.sdp && message.sdp.type === 'offer') { // This part is handled by 'request' in simple-webrtc-p2p-signaling
+                            const offerSenderName = message.name || (message.data && message.data.name) || 'Unknown Peer';
                             peerNames[remoteId] = offerSenderName;
-                            console.log(`Offer érkezett (direct) ${remoteId}-től (${offerSenderName}). Válasz küldése.`);
+                            console.log(`Offer received (direct) from ${remoteId} (${offerSenderName}). Sending response.`);
                             await handleOffer(remoteId, message.sdp, offerSenderName);
                         } else if (message.sdp && message.sdp.type === 'answer') {
-                            console.log(`Answer érkezett ${remoteId}-től (${peerNames[remoteId] || 'ismeretlen'}).`);
+                            console.log(`Answer received from ${remoteId} (${peerNames[remoteId] || 'unknown'}).`);
                             await handleAnswer(remoteId, message.sdp);
                         } else if (message.candidate) {
                             await handleCandidate(remoteId, message.candidate);
                         } else if (message.type === 'user_left' || message.type === 'disconnect') {
-                            console.log(`Peer ${remoteId} (${peerNames[remoteId] || 'ismeretlen'}) kilépett (szerver jelzés).`);
+                            console.log(`Peer ${remoteId} (${peerNames[remoteId] || 'unknown'}) left (server notification).`);
                             handleDisconnect(remoteId);
                         }
                     }
@@ -726,16 +725,16 @@
             }
         };
         ws.onerror = (error) => {
-            console.error("Szignál szerver hiba:", error);
-            displayMessage('SYSTEM', `Hiba a szignál szerverrel való kapcsolatban. Győződj meg róla, hogy fut és elérhető ezen a címen: ${SIGNALING_SERVER_URL}. Próbáld frissíteni az oldalt.`, 'system-message');
+            console.error("Signaling server error:", error);
+            displayMessage('SYSTEM', `Error with signaling server connection. Make sure it's running and accessible at ${SIGNALING_SERVER_URL}. Try refreshing the page.`, 'system-message');
         };
         ws.onclose = () => {
-            displayMessage('SYSTEM', `Kapcsolat bontva a szignál szerverrel (${SIGNALING_SERVER_URL}). Az újracsatlakozás nem automatikus, frissítsd az oldalt.`, 'system-message');
+            displayMessage('SYSTEM', `Connection to signaling server closed (${SIGNALING_SERVER_URL}). Reconnection is not automatic, please refresh the page.`, 'system-message');
         };
 
         function generateRandomName() {
-            const adjectives = ["Fürge", "Lusta", "Okos", "Vicces", "Bátor", "Csendes", "Gyors", "Nagy", "Kicsi", "Zöld", "Kék", "Piros", "Sárga", "Vidám", "Komoly"];
-            const nouns = ["Róka", "Kutya", "Macska", "Madár", "Oroszlán", "Tigris", "Elefánt", "Egér", "Panda", "Koala", "Süni", "Mókus", "Farkas", "Medve"];
+            const adjectives = ["Swift", "Lazy", "Smart", "Funny", "Brave", "Quiet", "Fast", "Big", "Small", "Green", "Blue", "Red", "Yellow", "Happy", "Serious"];
+            const nouns = ["Fox", "Dog", "Cat", "Bird", "Lion", "Tiger", "Elephant", "Mouse", "Panda", "Koala", "Hedgehog", "Squirrel", "Wolf", "Bear"];
             return `${adjectives[Math.floor(Math.random() * adjectives.length)]} ${nouns[Math.floor(Math.random() * nouns.length)]}`;
         }
 
@@ -756,7 +755,7 @@
             if (remotePeerId === localPeerId) return null;
             if (peerConnections[remotePeerId]) return peerConnections[remotePeerId];
 
-            console.log(`PeerConnection létrehozása ${remotePeerId}-vel.`);
+            console.log(`Creating PeerConnection with ${remotePeerId}.`);
             const pc = new RTCPeerConnection(configuration);
             peerConnections[remotePeerId] = pc;
 
@@ -768,17 +767,17 @@
 
             pc.ondatachannel = (event) => {
                 const dc = event.channel;
-                console.log(`Data channel érkezett ${remotePeerId}-től (${peerNames[remotePeerId] || 'ismeretlen'}). Címke: ${dc.label}`);
+                console.log(`Data channel received from ${remotePeerId} (${peerNames[remotePeerId] || 'unknown'}). Label: ${dc.label}`);
                 setupDataChannel(remotePeerId, dc);
             };
 
             pc.oniceconnectionstatechange = () => {
                 const state = pc.iceConnectionState;
-                console.log(`ICE connection state for ${remotePeerId} (${peerNames[remotePeerId] || 'ismeretlen'}): ${state}`);
+                console.log(`ICE connection state for ${remotePeerId} (${peerNames[remotePeerId] || 'unknown'}): ${state}`);
                 if (['disconnected', 'failed', 'closed'].includes(state)) {
                     handleDisconnect(remotePeerId);
                 } else if (state === 'connected') {
-                    displayMessage('SYSTEM', `P2P kapcsolat sikeresen felépült: ${peerNames[remotePeerId] || remotePeerId}`, 'system-message');
+                    displayMessage('SYSTEM', `P2P connection successfully established: ${peerNames[remotePeerId] || remotePeerId}`, 'system-message');
                     updatePeersList();
                 }
             };
@@ -790,8 +789,8 @@
             dc.binaryType = 'arraybuffer';
 
             dc.onopen = () => {
-                console.log(`Data channel nyitva ${remotePeerId}-vel (${peerNames[remotePeerId]}).`);
-                displayMessage('SYSTEM', `${peerNames[remotePeerId] || remotePeerId} csatlakozott a csevegéshez.`, 'system-message');
+                console.log(`Data channel open with ${remotePeerId} (${peerNames[remotePeerId]}).`);
+                displayMessage('SYSTEM', `${peerNames[remotePeerId] || remotePeerId} joined the chat.`, 'system-message');
                 updatePeersList();
             };
 
@@ -821,7 +820,7 @@
                                     transfer.meta = msgData;
                                     transfer.chunks = [];
                                     transfer.receivedBytes = 0;
-                                    updateTransferMessage(msgData.fileId, `Fájl fogadása indul: <strong>${msgData.name}</strong> (${formatFileSize(msgData.size)}) tőle: ${senderDisplayName}.`, 0);
+                                    updateTransferMessage(msgData.fileId, `Starting to receive file: <strong>${msgData.name}</strong> (${formatFileSize(msgData.size)}) from: ${senderDisplayName}.`, 0);
                                 }
                                 break;
                             case 'file-end':
@@ -841,1131 +840,750 @@
                                 }
                                 break;
                             case 'name-response':
-                                // Received peer name in response to our request
+                                // Peer sent their name
                                 if (msgData.name) {
                                     peerNames[remotePeerId] = msgData.name;
-                                    console.log(`Received name from peer ${remotePeerId}: ${msgData.name}`);
                                     updatePeersList();
                                 }
                                 break;
-                            default:
-                                console.warn("Ismeretlen JSON üzenettípus:", msgData);
                         }
                     } catch (e) {
-                        console.error("Hiba a JSON üzenet feldolgozásakor: ", e, event.data);
+                        console.error("Error processing message:", e);
                     }
-                } else if (event.data instanceof ArrayBuffer) {
-                    const activeReceiveTransferId = Object.keys(fileTransfers).find(id =>
-                        fileTransfers[id].type === 'receive' &&
-                        fileTransfers[id].peerId === remotePeerId &&
-                        fileTransfers[id].status === 'receiving'
-                    );
-
-                    if (activeReceiveTransferId) {
-                        const transfer = fileTransfers[activeReceiveTransferId];
-                        transfer.chunks.push(event.data);
-                        transfer.receivedBytes += event.data.byteLength;
-                        const progress = transfer.meta.size > 0 ? (transfer.receivedBytes / transfer.meta.size) * 100 : 0;
-                        updateTransferProgress(activeReceiveTransferId, progress);
-                    } else {
-                        console.warn(`Váratlan ArrayBuffer adat érkezett ${peerNames[remotePeerId] || remotePeerId}-től, nincs aktív fogadás ehhez a peerhez.`);
-                    }
+                } else {
+                    // Binary data - file chunk
+                    handleFileChunk(remotePeerId, event.data);
                 }
             };
+
             dc.onclose = () => {
-                console.log(`Data channel bezárva ${remotePeerId}-vel.`);
+                console.log(`Data channel closed with ${remotePeerId} (${peerNames[remotePeerId] || 'unknown'})`);
                 handleDisconnect(remotePeerId);
             };
+
             dc.onerror = (error) => {
-                console.error(`Data channel hiba ${remotePeerId}-vel:`, error);
-                displayMessage('SYSTEM', `Adatkapcsolati hiba történt ${peerNames[remotePeerId] || remotePeerId}-vel.`, 'system-message');
+                console.error(`Data channel error with ${remotePeerId}:`, error);
             };
+
+            // Request peer's name if we don't have it yet
+            if (dc.readyState === 'open' && (!peerNames[remotePeerId] || peerNames[remotePeerId].startsWith('Connecting'))) {
+                dc.send(JSON.stringify({
+                    type: 'name-request'
+                }));
+            }
+
+            // Setup keep-alive for mobile connections
+            if (isMobileDevice()) {
+                setupKeepAlive(remotePeerId);
+            }
         }
 
-        // Keep-alive mechanism functions for mobile data channel stability
-        function startKeepAlive() {
-            isFileOperationActive = true;
-            console.log('Starting keep-alive mechanism for file operations');
-
-            // Start keep-alive for all connected peers
-            Object.keys(dataChannels).forEach(peerId => {
-                if (dataChannels[peerId] && dataChannels[peerId].readyState === 'open') {
-                    startKeepAliveForPeer(peerId);
-                }
-            });
-        }
-
-        function stopKeepAlive() {
-            isFileOperationActive = false;
-            console.log('Stopping keep-alive mechanism');
-
-            // Stop all keep-alive intervals
-            Object.keys(keepAliveIntervals).forEach(peerId => {
-                clearInterval(keepAliveIntervals[peerId]);
-                delete keepAliveIntervals[peerId];
-            });
-        }
-
-        function startKeepAliveForPeer(peerId) {
-            // Clear existing interval if any
+        function setupKeepAlive(peerId) {
+            // Clear any existing interval
             if (keepAliveIntervals[peerId]) {
                 clearInterval(keepAliveIntervals[peerId]);
             }
 
-            // Start new keep-alive interval (every 5 seconds)
+            // Set new interval - send keep-alive every 30 seconds when no file operations are active
             keepAliveIntervals[peerId] = setInterval(() => {
-                if (isFileOperationActive && dataChannels[peerId] && dataChannels[peerId].readyState === 'open') {
+                const dc = dataChannels[peerId];
+                if (dc && dc.readyState === 'open' && !isFileOperationActive) {
                     try {
-                        dataChannels[peerId].send(JSON.stringify({ type: 'keep-alive' }));
-                        console.log(`Keep-alive ping sent to ${peerNames[peerId] || peerId}`);
-                    } catch (error) {
-                        console.error(`Failed to send keep-alive to ${peerNames[peerId] || peerId}:`, error);
-                        clearInterval(keepAliveIntervals[peerId]);
-                        delete keepAliveIntervals[peerId];
+                        dc.send(JSON.stringify({
+                            type: 'keep-alive',
+                            timestamp: Date.now()
+                        }));
+                        console.log(`Sent keep-alive ping to ${peerNames[peerId] || peerId}`);
+                    } catch (err) {
+                        console.error(`Error sending keep-alive to ${peerId}:`, err);
                     }
-                } else if (!isFileOperationActive) {
-                    // Stop keep-alive if file operation is no longer active
-                    clearInterval(keepAliveIntervals[peerId]);
-                    delete keepAliveIntervals[peerId];
                 }
-            }, 5000); // 5 second interval
+            }, 30000); // 30 seconds
         }
 
-        function stopKeepAliveForPeer(peerId) {
+        function enhancedPeerDiscovery(peerId, deviceType) {
+            // Reset connection attempts if this is a new discovery
+            if (!connectionAttempts[peerId]) {
+                connectionAttempts[peerId] = 0;
+            }
+
+            // Clear any existing timeout
+            if (connectionTimeouts[peerId]) {
+                clearTimeout(connectionTimeouts[peerId]);
+            }
+
+            // Attempt connection with exponential backoff
+            const attemptConnection = async () => {
+                connectionAttempts[peerId]++;
+                
+                if (connectionAttempts[peerId] > connectionRetryConfig.maxRetries) {
+                    logPeerDiscovery('error', `Connection failed after ${connectionAttempts[peerId] - 1} attempts`, peerId);
+                    return;
+                }
+
+                logPeerDiscovery('info', `Connection attempt ${connectionAttempts[peerId]}/${connectionRetryConfig.maxRetries}`, peerId);
+                
+                try {
+                    const pc = await createPeerConnection(peerId);
+                    if (!pc) return;
+                    
+                    // Create data channel
+                    const dc = pc.createDataChannel(`chat-${Date.now()}`);
+                    setupDataChannel(peerId, dc);
+                    
+                    // Create and send offer
+                    const offer = await pc.createOffer();
+                    await pc.setLocalDescription(offer);
+                    
+                    // Send offer with additional metadata
+                    sendSignalingMessage(peerId, {
+                        sdp: pc.localDescription,
+                        name: myRandomName,
+                        deviceType: isMobileDevice() ? 'mobile' : 'desktop',
+                        attempt: connectionAttempts[peerId]
+                    });
+                    
+                } catch (err) {
+                    logPeerDiscovery('error', `Error creating connection: ${err.message}`, peerId);
+                    
+                    // Schedule retry with exponential backoff
+                    const delay = Math.min(
+                        connectionRetryConfig.baseDelay * Math.pow(connectionRetryConfig.backoffMultiplier, connectionAttempts[peerId] - 1),
+                        connectionRetryConfig.maxDelay
+                    );
+                    
+                    connectionTimeouts[peerId] = setTimeout(attemptConnection, delay);
+                }
+            };
+            
+            // Start connection process
+            attemptConnection();
+        }
+
+        async function handleOffer(peerId, sdp, peerName, deviceType, attempt) {
+            try {
+                peerNames[peerId] = peerName;
+                
+                const pc = await createPeerConnection(peerId);
+                if (!pc) return;
+                
+                await pc.setRemoteDescription(new RTCSessionDescription(sdp));
+                const answer = await pc.createAnswer();
+                await pc.setLocalDescription(answer);
+                
+                sendSignalingMessage(peerId, {
+                    sdp: pc.localDescription,
+                    name: myRandomName,
+                    deviceType: isMobileDevice() ? 'mobile' : 'desktop'
+                });
+                
+                updatePeersList();
+                
+            } catch (err) {
+                console.error(`Error handling offer from ${peerId}:`, err);
+            }
+        }
+
+        async function handleAnswer(peerId, sdp) {
+            try {
+                const pc = peerConnections[peerId];
+                if (pc) {
+                    await pc.setRemoteDescription(new RTCSessionDescription(sdp));
+                }
+            } catch (err) {
+                console.error(`Error handling answer from ${peerId}:`, err);
+            }
+        }
+
+        async function handleCandidate(peerId, candidate) {
+            try {
+                const pc = peerConnections[peerId];
+                if (pc) {
+                    await pc.addIceCandidate(new RTCIceCandidate(candidate));
+                }
+            } catch (err) {
+                console.error(`Error handling ICE candidate from ${peerId}:`, err);
+            }
+        }
+
+        function handleDisconnect(peerId) {
+            // Clean up connection resources
+            if (dataChannels[peerId]) {
+                if (dataChannels[peerId].readyState === 'open') {
+                    dataChannels[peerId].close();
+                }
+                delete dataChannels[peerId];
+            }
+            
+            if (peerConnections[peerId]) {
+                peerConnections[peerId].close();
+                delete peerConnections[peerId];
+            }
+            
+            // Clean up keep-alive interval
             if (keepAliveIntervals[peerId]) {
                 clearInterval(keepAliveIntervals[peerId]);
                 delete keepAliveIntervals[peerId];
-                console.log(`Keep-alive stopped for ${peerNames[peerId] || peerId}`);
             }
-        }
-
-        function checkAndStopKeepAlive() {
-            // Check if any file operations are still active
-            const hasActiveTransfers = Object.values(fileTransfers).some(transfer =>
-                transfer.status === 'sending' ||
-                transfer.status === 'receiving' ||
-                transfer.status === 'pending_approval' ||
-                transfer.status === 'approved_to_receive'
-            );
-
-            if (!hasActiveTransfers && isFileOperationActive) {
-                console.log('No active file operations detected, stopping keep-alive mechanism');
-                stopKeepAlive();
+            
+            // Clean up connection attempts
+            delete connectionAttempts[peerId];
+            if (connectionTimeouts[peerId]) {
+                clearTimeout(connectionTimeouts[peerId]);
+                delete connectionTimeouts[peerId];
             }
-        }
-
-        async function createOffer(remotePeerId, retryAttempt = 0) {
-            if (remotePeerId === localPeerId || peerConnections[remotePeerId]) {
-                return;
+            
+            // Display disconnect message if we had a name (meaning connection was established)
+            if (peerNames[peerId] && !peerNames[peerId].startsWith('Connecting')) {
+                displayMessage('SYSTEM', `${peerNames[peerId]} disconnected.`, 'system-message');
             }
-
-            logPeerDiscovery('info', `Initiating offer creation (attempt ${retryAttempt + 1})`, remotePeerId, {
-                isMobile: isMobileDevice(),
-                retryAttempt: retryAttempt
-            });
-
-            const pc = await createPeerConnection(remotePeerId);
-            if (!pc) return;
-
-            // Mobile-specific data channel configuration
-            const dataChannelConfig = {
-                ordered: true,
-                maxRetransmits: isMobileDevice() ? 5 : 3 // More retransmits for mobile (reliable delivery)
-            };
-
-            const dataChannel = pc.createDataChannel("chatAndFileChannel", dataChannelConfig);
-            setupDataChannel(remotePeerId, dataChannel);
-
-            try {
-                // Mobile-specific offer options
-                const offerOptions = {
-                    offerToReceiveAudio: false,
-                    offerToReceiveVideo: false,
-                    iceRestart: retryAttempt > 0 // Restart ICE on retry attempts
-                };
-
-                const offer = await pc.createOffer(offerOptions);
-                await pc.setLocalDescription(offer);
-
-                logPeerDiscovery('success', 'Offer created successfully, sending to peer', remotePeerId, {
-                    offerType: offer.type,
-                    iceRestart: offerOptions.iceRestart
-                });
-
-                sendSignalingMessage(remotePeerId, {
-                    sdp: pc.localDescription,
-                    name: myRandomName,
-                    deviceType: isMobileDevice() ? 'mobile' : 'desktop',
-                    attempt: retryAttempt + 1
-                });
-
-                // Initialize connection attempt tracking
-                if (!connectionAttempts[remotePeerId]) {
-                    connectionAttempts[remotePeerId] = 0;
-                }
-                connectionAttempts[remotePeerId] = retryAttempt + 1;
-
-                // Set connection timeout for mobile devices
-                if (isMobileDevice()) {
-                    setupConnectionTimeout(remotePeerId);
-                }
-
-            } catch (e) {
-                logPeerDiscovery('error', `Failed to create offer: ${e.message}`, remotePeerId, {
-                    error: e.name,
-                    retryAttempt: retryAttempt
-                });
-
-                // Retry logic for mobile devices
-                if (isMobileDevice() && retryAttempt < connectionRetryConfig.maxRetries) {
-                    const delay = Math.min(
-                        connectionRetryConfig.baseDelay * Math.pow(connectionRetryConfig.backoffMultiplier, retryAttempt),
-                        connectionRetryConfig.maxDelay
-                    );
-
-                    logPeerDiscovery('warn', `Retrying offer creation in ${delay}ms`, remotePeerId);
-
-                    setTimeout(() => {
-                        // Clean up failed connection before retry
-                        if (peerConnections[remotePeerId]) {
-                            peerConnections[remotePeerId].close();
-                            delete peerConnections[remotePeerId];
-                        }
-                        createOffer(remotePeerId, retryAttempt + 1);
-                    }, delay);
-                }
-            }
-        }
-
-        // Mobile-specific connection timeout management
-        function setupConnectionTimeout(remotePeerId) {
-            const timeoutDuration = isMobileDevice() ? 15000 : 10000; // Longer timeout for mobile
-
-            // Clear existing timeout if any
-            if (connectionTimeouts[remotePeerId]) {
-                clearTimeout(connectionTimeouts[remotePeerId]);
-            }
-
-            connectionTimeouts[remotePeerId] = setTimeout(() => {
-                const pc = peerConnections[remotePeerId];
-                if (pc && pc.iceConnectionState !== 'connected' && pc.iceConnectionState !== 'completed') {
-                    logPeerDiscovery('warn', `Connection timeout, attempting recovery`, remotePeerId, {
-                        iceConnectionState: pc.iceConnectionState,
-                        connectionState: pc.connectionState
-                    });
-
-                    // Attempt connection recovery for mobile devices
-                    if (isMobileDevice()) {
-                        attemptConnectionRecovery(remotePeerId);
-                    }
-                }
-                delete connectionTimeouts[remotePeerId];
-            }, timeoutDuration);
-        }
-
-        // Connection recovery mechanism for mobile devices
-        async function attemptConnectionRecovery(remotePeerId) {
-            const currentAttempts = connectionAttempts[remotePeerId] || 0;
-
-            if (currentAttempts < connectionRetryConfig.maxRetries) {
-                logPeerDiscovery('info', 'Attempting connection recovery', remotePeerId, {
-                    currentAttempts: currentAttempts,
-                    maxRetries: connectionRetryConfig.maxRetries
-                });
-
-                // Clean up existing connection
-                if (peerConnections[remotePeerId]) {
-                    peerConnections[remotePeerId].close();
-                    delete peerConnections[remotePeerId];
-                }
-
-                // Wait before retry
-                const delay = Math.min(
-                    connectionRetryConfig.baseDelay * Math.pow(connectionRetryConfig.backoffMultiplier, currentAttempts),
-                    connectionRetryConfig.maxDelay
-                );
-
-                setTimeout(() => {
-                    createOffer(remotePeerId, currentAttempts);
-                }, delay);
-            } else {
-                logPeerDiscovery('error', 'Connection recovery failed - max retries exceeded', remotePeerId);
-                displayMessage('SYSTEM', `Nem sikerült kapcsolatot létesíteni ${peerNames[remotePeerId] || remotePeerId} társsal mobil eszközön. Próbáld újra később.`, 'system-message');
-            }
-        }
-
-        // Simplified peer discovery - always try to connect
-        function enhancedPeerDiscovery(peerId, deviceType = 'unknown') {
-            logPeerDiscovery('info', 'Peer discovery initiated', peerId, {
-                remoteDeviceType: deviceType,
-                localDeviceType: isMobileDevice() ? 'mobile' : 'desktop'
-            });
-
-            // Always try to connect immediately with minimal delay
+            
+            // Keep the name for a while in case they reconnect
             setTimeout(() => {
-                logPeerDiscovery('info', 'Creating offer to peer', peerId);
-                createOffer(peerId, 0);
-            }, 100); // Very short delay to avoid race conditions
-        }
-
-        async function handleOffer(remotePeerId, sdp, offerSenderName, deviceType = 'unknown', attempt = 1) {
-            if (remotePeerId === localPeerId) return;
-
-            logPeerDiscovery('info', `Processing incoming offer (attempt ${attempt})`, remotePeerId, {
-                senderName: offerSenderName,
-                remoteDeviceType: deviceType,
-                isMobile: isMobileDevice()
-            });
-
-            peerNames[remotePeerId] = offerSenderName;
-
-            const pc = await createPeerConnection(remotePeerId);
-            if (!pc) return;
-            // Az ondatachannel esemény kezeli a data channel beállítását.
-
-            try {
-                await pc.setRemoteDescription(new RTCSessionDescription(sdp));
-
-                // Mobile-specific answer options
-                const answerOptions = {
-                    offerToReceiveAudio: false,
-                    offerToReceiveVideo: false
-                };
-
-                const answer = await pc.createAnswer(answerOptions);
-                await pc.setLocalDescription(answer);
-
-                logPeerDiscovery('success', 'Answer created successfully, sending to peer', remotePeerId, {
-                    answerType: answer.type
-                });
-
-                sendSignalingMessage(remotePeerId, {
-                    sdp: pc.localDescription,
-                    name: myRandomName,
-                    deviceType: isMobileDevice() ? 'mobile' : 'desktop',
-                    responseToAttempt: attempt
-                });
-
-                // Set connection timeout for mobile devices
-                if (isMobileDevice()) {
-                    setupConnectionTimeout(remotePeerId);
+                if (!peerConnections[peerId]) {
+                    delete peerNames[peerId];
                 }
-
-                updatePeersList();
-
-            } catch (e) {
-                logPeerDiscovery('error', `Failed to handle offer: ${e.message}`, remotePeerId, {
-                    error: e.name,
-                    attempt: attempt
-                });
-
-                // Mobile-specific error recovery
-                if (isMobileDevice() && attempt < connectionRetryConfig.maxRetries) {
-                    logPeerDiscovery('warn', 'Attempting offer handling retry', remotePeerId);
-
-                    // Clean up failed connection
-                    if (peerConnections[remotePeerId]) {
-                        peerConnections[remotePeerId].close();
-                        delete peerConnections[remotePeerId];
-                    }
-
-                    // Retry with exponential backoff
-                    const delay = Math.min(
-                        connectionRetryConfig.baseDelay * Math.pow(connectionRetryConfig.backoffMultiplier, attempt - 1),
-                        connectionRetryConfig.maxDelay
-                    );
-
-                    setTimeout(() => {
-                        handleOffer(remotePeerId, sdp, offerSenderName, deviceType, attempt + 1);
-                    }, delay);
-                }
-            }
-        }
-
-        async function handleAnswer(remotePeerId, sdp) {
-            if (remotePeerId === localPeerId) return;
-            console.log(`Answer kezelése ${remotePeerId}-től.`);
-            const pc = peerConnections[remotePeerId];
-            if (pc) {
-                try {
-                    await pc.setRemoteDescription(new RTCSessionDescription(sdp));
-                    console.log(`Kapcsolat felépítve ${remotePeerId}-vel (${peerNames[remotePeerId] || 'ismeretlen'}).`);
-                    updatePeersList();
-                } catch (e) {
-                    console.error(`Hiba answer kezelésekor ${remotePeerId}-től:`, e);
-                }
-            }
-        }
-
-        async function handleCandidate(remotePeerId, candidate) {
-            if (remotePeerId === localPeerId) return;
-            const pc = peerConnections[remotePeerId];
-            // Fontos: addIceCandidate csak akkor hívható, ha már van setRemoteDescription
-            if (pc && candidate && pc.remoteDescription && pc.signalingState !== 'closed') {
-                try {
-                    await pc.addIceCandidate(new RTCIceCandidate(candidate));
-                } catch (e) {
-                    // console.warn(`Hiba ICE candidate hozzáadásakor ${remotePeerId}-től: ${e.message}`);
-                }
-            } else if (pc && candidate && !pc.remoteDescription) {
-                // Ha még nincs remoteDescription, várólistára tesszük a jelölteket
-                // Egyszerűsítésként ezt most nem implementálom, a legtöbb esetben működik anélkül is,
-                // de robosztusabb megoldásban szükséges lehet.
-                // console.warn(`ICE candidate érkezett ${remotePeerId}-től, de a remoteDescription még nincs beállítva. Jelölt ideiglenesen figyelmen kívül hagyva.`);
-            }
-        }
-
-        function sendSignalingMessage(remotePeerId, data) {
-            // A simple-webrtc-p2p-signaling szerver elvárásai szerint:
-            let payload = { dest: remotePeerId, data: {} };
-            if (data.sdp) payload.data.sdp = data.sdp;
-            if (data.candidate) payload.data.candidate = data.candidate;
-            if (data.name) payload.data.name = data.name; // Saját név küldése
-
-            if (ws.readyState === WebSocket.OPEN) {
-                ws.send(JSON.stringify(payload));
-            } else {
-                console.error("WebSocket nem nyitott, szignál üzenet nem küldhető:", payload);
-                displayMessage('SYSTEM', `Hiba: A szignál szerver nem elérhető az üzenetküldéshez.`, 'system-message');
-            }
-        }
-
-        function handleDisconnect(remotePeerId) {
-            if (remotePeerId === localPeerId || (!peerConnections[remotePeerId] && !dataChannels[remotePeerId])) return;
-
-            const peerDisplayName = peerNames[remotePeerId] || remotePeerId;
-            displayMessage('SYSTEM', `${peerDisplayName} megszakította a kapcsolatot vagy kilépett.`, 'system-message');
-
-            Object.keys(fileTransfers).forEach(fileIdKey => {
-                const transfer = fileTransfers[fileIdKey];
-                if (transfer && transfer.peerId === remotePeerId && (transfer.status === 'sending' || transfer.status === 'receiving')) {
-                    if (transfer.type === 'send' && transfer.reader && typeof transfer.reader.abort === 'function') {
-                        transfer.reader.abort();
-                    }
-                    updateTransferMessage(fileIdKey, `Fájlátvitel (${transfer.meta.name || 'ismeretlen fájl'}) megszakadt ${peerDisplayName} felé/től (kapcsolat bontva).`, -1, "Hiba");
-                    transfer.status = 'failed';
-                    if (transfer.chunks) transfer.chunks = []; // Memória felszabadítás
-                }
-            });
-
-            if (dataChannels[remotePeerId]) {
-                dataChannels[remotePeerId].close(); // Explicit bezárás
-                delete dataChannels[remotePeerId];
-            }
-
-            // Clean up keep-alive interval for this peer
-            stopKeepAliveForPeer(remotePeerId);
-            if (peerConnections[remotePeerId]) {
-                peerConnections[remotePeerId].close();
-                delete peerConnections[remotePeerId];
-            }
-            delete peerNames[remotePeerId];
+            }, 60000); // Remove name after 1 minute if no reconnection
+            
             updatePeersList();
         }
 
+        function sendSignalingMessage(peerId, data) {
+            if (ws.readyState === WebSocket.OPEN) {
+                ws.send(JSON.stringify({
+                    dest: peerId,
+                    data: data
+                }));
+            }
+        }
+
         function updatePeersList() {
-            peersContainer.innerHTML = '';
-            const connectedRemotePeerIds = Object.keys(dataChannels).filter(id =>
-                id !== localPeerId && dataChannels[id] && dataChannels[id].readyState === 'open'
+            const connectedPeers = Object.keys(dataChannels).filter(peerId => 
+                dataChannels[peerId] && dataChannels[peerId].readyState === 'open'
             );
-
-            recipientSelect.innerHTML = '<option value="">Mindenkinek</option>'; // Alapértelmezett opció
-
-            if (connectedRemotePeerIds.length === 0) {
-                peersContainer.innerHTML = '<p>Jelenleg nincsenek elérhető társak.</p>';
+            
+            const connectingPeers = Object.keys(peerConnections).filter(peerId => 
+                !dataChannels[peerId] || dataChannels[peerId].readyState !== 'open'
+            );
+            
+            if (connectedPeers.length === 0 && connectingPeers.length === 0) {
+                peersContainer.innerHTML = '<p>No peers available at the moment.</p>';
+                recipientSelect.innerHTML = '';
                 recipientSelect.classList.add('hidden');
                 sendButton.classList.add('hidden');
-                sendBroadcastButton.textContent = "Küldés mindenkinek"; // Visszaállítás
                 return;
             }
-
-            const ul = document.createElement('ul');
-            connectedRemotePeerIds.forEach(remotePeerId => {
-                // Get the peer name from the peerNames object
-                let peerName = peerNames[remotePeerId];
-                
-                // If the name is missing, starts with "Csatlakozás...", or is just the peer ID
-                if (!peerName || peerName === remotePeerId || peerName.startsWith('Csatlakozás...')) {
-                    // Try to get the name from the data channel if available
-                    if (dataChannels[remotePeerId] && dataChannels[remotePeerId].readyState === 'open') {
-                        // Request the peer name directly
-                        try {
-                            dataChannels[remotePeerId].send(JSON.stringify({
-                                type: 'name-request'
-                            }));
-                        } catch (e) {
-                            console.error(`Error requesting name from peer ${remotePeerId}:`, e);
-                        }
-                    }
-                    
-                    // Use a friendly display name in the meantime
-                    peerName = `Társa (${remotePeerId.substring(0, 8)}...)`;
-                }
-                const li = document.createElement('li');
-                li.className = 'peer';
-
-                const nameSpan = document.createElement('span');
-                nameSpan.textContent = peerName;
-                li.appendChild(nameSpan);
-
-                const fileInputId = `file-input-${remotePeerId}`;
-                const fileInput = document.createElement('input');
-                fileInput.type = 'file';
-                fileInput.multiple = true; // Több fájl egyszerre
-                fileInput.id = fileInputId;
-                fileInput.style.display = 'none';
-                fileInput.dataset.peerId = remotePeerId;
-                li.appendChild(fileInput);
-
-                const sendFileBtn = document.createElement('button');
-                sendFileBtn.textContent = 'Fájl(ok) küldése';
-                sendFileBtn.onclick = () => document.getElementById(fileInputId).click();
-                li.appendChild(sendFileBtn);
-
-                fileInput.onchange = (event) => {
-                    const files = event.target.files;
-                    if (files.length > 0) {
-                        // Start keep-alive mechanism during file selection
-                        startKeepAlive();
-                        initiateMultipleFileSend(remotePeerId, files);
-                    }
-                    event.target.value = null; // Input ürítése újabb feltöltéshez
-                };
-                ul.appendChild(li);
-
-                const option = document.createElement('option');
-                option.value = remotePeerId;
-                option.textContent = peerName;
-                recipientSelect.appendChild(option);
+            
+            let html = '<ul>';
+            let selectHtml = '<option value="broadcast">Everyone</option>';
+            
+            // First show connected peers
+            connectedPeers.forEach(peerId => {
+                const peerName = peerNames[peerId] || peerId;
+                html += `
+                    <li class="peer">
+                        <span>${peerName}</span>
+                        <button onclick="selectPeer('${peerId}')">Chat</button>
+                    </li>
+                `;
+                selectHtml += `<option value="${peerId}">${peerName}</option>`;
             });
-            peersContainer.appendChild(ul);
-
-            recipientSelect.classList.remove('hidden');
-            sendButton.classList.remove('hidden');
-
-            // Dinamikus gomb szöveg a recipientSelect alapján
-            if (recipientSelect.value && recipientSelect.value !== "") {
-                sendBroadcastButton.classList.add('hidden'); // Ha van konkrét címzett, a broadcast gombot elrejtjük
-                sendButton.classList.remove('hidden');
-            } else { // "Mindenkinek" van kiválasztva
-                sendBroadcastButton.classList.remove('hidden');
-                sendButton.classList.add('hidden');
-            }
-        }
-
-        recipientSelect.onchange = () => {
-            updatePeersList(); // Újrahívjuk, hogy a gombok láthatósága frissüljön
-        };
-
-
-        function initiateMultipleFileSend(peerId, files) {
-            console.log("Fájlok küldése kezdeményezve, darabszám:", files.length, "címzett:", peerId);
-            const filesArray = Array.from(files);
-
-            filesArray.forEach((currentFile, index) => {
-                if (!(currentFile instanceof File)) {
-                    console.error("Érvénytelen fájl objektum a ciklusban:", currentFile);
-                    return; // continue a forEach-ben
-                }
-                console.log(`Fájl ütemezése küldésre (${index}):`, currentFile.name, "címzett:", peerId);
-                // Kis késleltetés, hogy a UI és a hálózat ne terhelődjön túl azonnal sok kéréssel
-                setTimeout(() => {
-                    console.log(`requestFileSend hívása ezzel a fájllal:`, currentFile, "címzett:", peerId);
-                    requestFileSend(peerId, currentFile);
-                }, index * 300); // Növelt késleltetés
+            
+            // Then show connecting peers
+            connectingPeers.forEach(peerId => {
+                const peerName = peerNames[peerId] || `Unknown (${peerId.substring(0, 6)}...)`;
+                html += `
+                    <li class="peer">
+                        <span>${peerName} (connecting...)</span>
+                    </li>
+                `;
             });
+            
+            html += '</ul>';
+            peersContainer.innerHTML = html;
+            recipientSelect.innerHTML = selectHtml;
         }
 
-        function requestFileSend(peerId, file) {
-            if (!(file instanceof File)) {
-                console.error("Hiba a requestFileSend-ben: A file paraméter nem File objektum.", file);
-                displayMessage('SYSTEM', `Hiba: Érvénytelen fájl a küldési kérelemhez ${peerNames[peerId] || peerId} felé.`, 'system-message');
-                return;
-            }
-
-            const dc = dataChannels[peerId];
-            if (!dc || dc.readyState !== 'open') {
-                displayMessage('SYSTEM', `Hiba: Adatcsatorna nem elérhető ${peerNames[peerId] || peerId} felé a fájlküldési kérelemhez (${file.name}).`, 'system-message');
-                return;
-            }
-
-            const fileId = generateFileId();
-            const fileMeta = {
-                type: 'file-request',
-                fileId: fileId,
-                name: file.name,
-                size: file.size,
-                mimeType: file.type || 'application/octet-stream',
-                senderName: myRandomName
-            };
-
-            const messageElementId = `transfer-msg-${fileId}`;
-            const progressElementId = `progress-text-${fileId}`; // Megkülönböztetjük a progress bar ID-től
-            const progressBarId = `progressbar-${fileId}`;
-
-            fileTransfers[fileId] = {
-                type: 'send',
-                peerId: peerId,
-                file: file,
-                meta: fileMeta,
-                status: 'requested',
-                messageElementId: messageElementId,
-                progressElementId: progressElementId, // Szöveges rész ID-ja
-                progressBarId: progressBarId         // Progress bar ID-ja
-            };
-
-            displayMessageWithProgress(
-                myRandomName,
-                `Fájlküldési kérelem: <strong>${fileMeta.name}</strong> (${formatFileSize(fileMeta.size)}) neki: ${peerNames[peerId] || peerId}. Várakozás a jóváhagyásra...`,
-                ['my-message', 'file-transfer-message'],
-                true,
-                messageElementId,
-                progressElementId,
-                progressBarId,
-                0 // Kezdeti progress 0%
-            );
-
-            try {
-                dc.send(JSON.stringify(fileMeta));
-            } catch (e) {
-                updateTransferMessage(fileId, `Hiba a fájlküldési kérelem elküldésekor (${fileMeta.name}): ${e.message}`, -1, "Hiba");
-                fileTransfers[fileId].status = 'failed';
-            }
-        }
-
-        function handleFileRequest(remotePeerId, requestData) {
-            const { fileId, name, size, mimeType, senderName } = requestData;
-
-            const messageElementId = `transfer-msg-${fileId}`;
-            const progressElementId = `progress-text-${fileId}`;
-            const progressBarId = `progressbar-${fileId}`;
-
-            fileTransfers[fileId] = {
-                type: 'receive',
-                peerId: remotePeerId,
-                meta: requestData,
-                status: 'pending_approval',
-                messageElementId: messageElementId,
-                progressElementId: progressElementId,
-                progressBarId: progressBarId,
-                chunks: [],
-                receivedBytes: 0
-            };
-
-            const acceptBtn = {
-                text: 'Elfogad',
-                callback: () => {
-                    if (fileTransfers[fileId] && fileTransfers[fileId].status === 'pending_approval') {
-                        fileTransfers[fileId].status = 'approved_to_receive';
-                        sendDataChannelMessage(remotePeerId, { type: 'file-accept', fileId: fileId });
-                        updateTransferMessage(fileId, `Elfogadtad a fájlt: <strong>${name}</strong>. Várakozás a küldőre...`, 0); // Progress 0
-                        const msgElem = document.getElementById(messageElementId);
-                        if (msgElem) {
-                            const actionsDiv = msgElem.querySelector('.actions');
-                            if (actionsDiv) actionsDiv.innerHTML = '<em>Elfogadva, várakozás a küldésre...</em>';
-                        }
-                    }
-                }
-            };
-            const rejectBtn = {
-                text: 'Elutasít',
-                callback: () => {
-                    if (fileTransfers[fileId] && fileTransfers[fileId].status === 'pending_approval') {
-                        fileTransfers[fileId].status = 'rejected_by_receiver';
-                        sendDataChannelMessage(remotePeerId, { type: 'file-reject', fileId: fileId, reason: 'A felhasználó elutasította.' });
-                        updateTransferMessage(fileId, `Elutasítottad a fájlt: <strong>${name}</strong>.`, -1, "Elutasítva");
-                        const msgElem = document.getElementById(messageElementId);
-                        if (msgElem) {
-                            const actionsDiv = msgElem.querySelector('.actions');
-                            if (actionsDiv) actionsDiv.innerHTML = '<em>Elutasítva.</em>';
-                        }
-                    }
-                }
-            };
-
-            // Check if auto-accept is enabled
-            if (autoAcceptFilesToggle.checked) {
-                console.log(`Automatikus fájl elfogadás: ${name} (${formatFileSize(size)})`);
-                
-                // Auto-accept the file immediately
-                fileTransfers[fileId].status = 'approved_to_receive';
-                sendDataChannelMessage(remotePeerId, { type: 'file-accept', fileId: fileId });
-                
-                // Display message with auto-accept notification
-                displayMessageWithProgress(
-                    senderName || peerNames[remotePeerId] || remotePeerId,
-                    `Fájl automatikusan elfogadva: <strong>${name}</strong> (${formatFileSize(size)}). Várakozás a küldőre...`,
-                    ['their-message', 'file-transfer-message'],
-                    true,
-                    messageElementId,
-                    progressElementId,
-                    progressBarId,
-                    0, // Initial progress
-                    [] // No buttons needed for auto-accept
-                );
-            } else {
-                // Display normal accept/reject dialog
-                displayMessageWithProgress(
-                    senderName || peerNames[remotePeerId] || remotePeerId,
-                    `Fájlt szeretne küldeni: <strong>${name}</strong> (${formatFileSize(size)}). Elfogadod?`,
-                    ['their-message', 'file-transfer-message'],
-                    true,
-                    messageElementId,
-                    progressElementId,
-                    progressBarId,
-                    null, // Nincs progress amíg nincs elfogadva
-                    [acceptBtn, rejectBtn]
-                );
-            }
-        }
-
-        function handleFileAccept(remotePeerId, acceptData) {
-            const { fileId } = acceptData;
-            const transfer = fileTransfers[fileId];
-
-            if (transfer && transfer.type === 'send' && transfer.peerId === remotePeerId && transfer.status === 'requested') {
-                transfer.status = 'approved_to_send';
-                updateTransferMessage(fileId, `<strong>${peerNames[remotePeerId] || remotePeerId}</strong> elfogadta a fájlt: <strong>${transfer.file.name}</strong>. Küldés indítása...`, 0);
-                startActualFileSend(remotePeerId, fileId);
-            }
-        }
-
-        function handleFileReject(remotePeerId, rejectData) {
-            const { fileId, reason } = rejectData;
-            const transfer = fileTransfers[fileId];
-
-            if (transfer && transfer.type === 'send' && transfer.peerId === remotePeerId &&
-                (transfer.status === 'requested' || transfer.status === 'approved_to_send')) {
-                transfer.status = 'rejected_by_receiver';
-                updateTransferMessage(fileId, `<strong>${peerNames[remotePeerId] || remotePeerId}</strong> elutasította a fájlt: <strong>${transfer.file.name}</strong>. ${reason || ''}`, -1, "Elutasítva");
-            }
-        }
-
-        function startActualFileSend(remotePeerId, fileId) {
-            const transfer = fileTransfers[fileId];
-            if (!transfer || transfer.type !== 'send' || transfer.peerId !== remotePeerId || transfer.status !== 'approved_to_send') {
-                return;
-            }
-
-            const dc = dataChannels[remotePeerId];
-            if (!dc || dc.readyState !== 'open') {
-                updateTransferMessage(fileId, `Hiba: Adatcsatorna nem elérhető a fájlküldés indításakor (${transfer.file.name}).`, -1, "Hiba");
-                transfer.status = 'failed';
-                return;
-            }
-
-            const fileStartMeta = {
-                type: 'file-start',
-                fileId: fileId,
-                name: transfer.file.name,
-                size: transfer.file.size,
-                mimeType: transfer.file.type || 'application/octet-stream'
-            };
-            try {
-                dc.send(JSON.stringify(fileStartMeta));
-            } catch (e) {
-                updateTransferMessage(fileId, `Hiba a 'file-start' küldésekor: ${e.message}`, -1, "Hiba");
-                transfer.status = 'failed';
-                return;
-            }
-
-            transfer.status = 'sending';
-            transfer.reader = new FileReader();
-            let offset = 0;
-            updateTransferProgress(fileId, 0); // Kezdeti progress 0%
-
-            function readNextChunk() {
-                if (!fileTransfers[fileId] || fileTransfers[fileId].status !== 'sending') {
-                    if (fileTransfers[fileId] && fileTransfers[fileId].reader && typeof fileTransfers[fileId].reader.abort === 'function') {
-                        fileTransfers[fileId].reader.abort();
-                    }
-                    return;
-                }
-                if (offset >= transfer.file.size) {
-                    if (dc.readyState === 'open') {
-                        try {
-                            dc.send(JSON.stringify({ type: 'file-end', fileId: fileId }));
-                        } catch (e) {
-                            updateTransferMessage(fileId, `Hiba a 'file-end' üzenet küldésekor: ${e.message}`, -1, "Hiba");
-                            transfer.status = 'failed';
-                            return;
-                        }
-                    }
-                    updateTransferMessage(fileId, `Fájl elküldve: <strong>${transfer.file.name}</strong>`, 100, "Kész");
-                    transfer.status = 'completed';
-                    checkAndStopKeepAlive();
-                    return;
-                }
-                const slice = transfer.file.slice(offset, offset + CHUNK_SIZE);
-                transfer.reader.readAsArrayBuffer(slice);
-            }
-
-            transfer.reader.onload = async (e) => {
-                if (!fileTransfers[fileId] || fileTransfers[fileId].status !== 'sending') return;
-                const chunk = e.target.result;
-                try {
-                    await sendChunkWhenReady(dc, chunk);
-                    offset += chunk.byteLength;
-                    const progress = transfer.file.size > 0 ? (offset / transfer.file.size) * 100 : (offset > 0 ? 100 : 0);
-                    updateTransferProgress(fileId, progress);
-
-                    if (dc.readyState === 'open' && fileTransfers[fileId] && fileTransfers[fileId].status === 'sending') {
-                        setTimeout(readNextChunk, 0);
-                    } else if (fileTransfers[fileId] && fileTransfers[fileId].status === 'sending') {
-                        updateTransferMessage(fileId, `Fájlküldés (${transfer.file.name}) megszakadt (csatorna bezárult).`, -1, "Hiba");
-                        transfer.status = 'failed';
-                    }
-                } catch (error) {
-                    console.error(`Hiba a chunk küldésekor (${fileId}):`, error);
-                    updateTransferMessage(fileId, `Fájlküldési hiba (${transfer.file.name}): ${error.message}`, -1, "Hiba");
-                    transfer.status = 'failed';
-                }
-            };
-            transfer.reader.onerror = (error) => {
-                if (!fileTransfers[fileId] || fileTransfers[fileId].status !== 'sending') return;
-                updateTransferMessage(fileId, `Hiba a fájl olvasásakor (${transfer.file.name}).`, -1, "Hiba");
-                transfer.status = 'failed';
-            };
-            transfer.reader.onabort = () => {
-                console.log(`File reading aborted for ${transfer.file.name} (${fileId})`);
-            };
-            readNextChunk();
-        }
-
-        async function sendChunkWhenReady(dc, chunk) {
-            // Várunk, amíg a buffer kiürül egy bizonyos szint alá
-            while (dc.bufferedAmount > MAX_BUFFERED_AMOUNT_SEND_THRESHOLD && dc.readyState === 'open') {
-                await new Promise(resolve => {
-                    const timeoutId = setTimeout(() => {
-                        console.warn("Timeout waiting for bufferedamountlow (5s), trying to send anyway.");
-                        dc.onbufferedamountlow = null;
-                        resolve();
-                    }, 5000);
-
-                    dc.onbufferedamountlow = () => {
-                        clearTimeout(timeoutId);
-                        dc.onbufferedamountlow = null; // Fontos, hogy csak egyszer fusson le
-                        resolve();
-                    };
-                });
-                if (dc.readyState !== 'open') throw new Error("Data channel closed while waiting for buffer to clear.");
-            }
-            // Küldés, ha a csatorna még nyitva van
-            if (dc.readyState === 'open') {
-                try {
-                    dc.send(chunk);
-                } catch (e) {
-                    throw new Error(`Data channel send error: ${e.message}. Chunk size: ${chunk.byteLength}, Buffered amount: ${dc.bufferedAmount}`);
-                }
-            } else {
-                throw new Error("Data channel closed before sending chunk.");
-            }
-        }
-
-        function handleFileEnd(remotePeerId, endData) {
-            const { fileId } = endData;
-            const transfer = fileTransfers[fileId];
-
-            if (transfer && transfer.type === 'receive' && transfer.peerId === remotePeerId && transfer.status === 'receiving') {
-                if (transfer.receivedBytes === transfer.meta.size) {
-                    const blob = new Blob(transfer.chunks, { type: transfer.meta.mimeType });
-                    const url = URL.createObjectURL(blob);
-                    const downloadName = transfer.meta.name;
-
-                    // Automatikus letöltés
-                    const a = document.createElement('a');
-                    a.style.display = 'none';
-                    a.href = url;
-                    a.download = downloadName;
-                    document.body.appendChild(a);
-                    a.click();
-                    document.body.removeChild(a);
-                    // Az URL.revokeObjectURL(url) itt NEM hívjuk meg azonnal, hogy a fallback link működjön.
-                    // Fontold meg a transfer.blobUrl = url; tárolását és későbbi revoke-olását, pl. az üzenet eltávolításakor.
-
-                    updateTransferMessage(fileId,
-                        `Fájl fogadva: <strong>${downloadName}</strong> (${formatFileSize(transfer.meta.size)}). A letöltés automatikusan elindult. <br>Ha nem, <a href="${url}" download="${downloadName}" target="_blank">kattints ide a letöltéshez</a>.`,
-                        100, "Kész");
-                    transfer.status = 'completed';
-                    checkAndStopKeepAlive();
-                    // transfer.chunks = []; // Opcionális: chunkok törlése a memória felszabadításáért, ha a blob már létrejött.
-                    // De ha a fallback link is a chunkokból generálna új blob-ot, akkor ne töröld.
-                    // Mivel a fallback link az egyszer generált `url`-t használja, a chunkok törölhetők lennének.
-                    // De a biztonság kedvéért most benne hagyom, hátha valamilyen edge case-ben kellhet.
-                } else {
-                    updateTransferMessage(fileId,
-                        `Hiba: ${transfer.meta.name} fájl mérete nem egyezik (várt: ${formatFileSize(transfer.meta.size)}, kapott: ${formatFileSize(transfer.receivedBytes)}). Átvitel törölve.`,
-                        -1, "Hiba");
-                    transfer.status = 'failed';
-                    if (transfer.chunks) transfer.chunks = []; // Hiba esetén ürítsük
-                }
-            }
-        }
-
-        function sendDataChannelMessage(remotePeerId, messageObject) {
-            const dc = dataChannels[remotePeerId];
-            if (dc && dc.readyState === 'open') {
-                try {
-                    dc.send(JSON.stringify(messageObject));
-                } catch (e) {
-                    console.error(`Hiba az adatcsatorna üzenet küldésekor ${remotePeerId}-nek: `, messageObject, e);
-                    displayMessage('SYSTEM', `Hiba az üzenet küldésekor ${peerNames[remotePeerId] || remotePeerId}-nek: ${e.message}`, 'system-message');
-                }
-            } else {
-                console.warn(`Data channel nem nyitott vagy nem létezik ${remotePeerId}-hez az üzenetküldéshez: `, messageObject);
-                displayMessage('SYSTEM', `Hiba: Adatcsatorna nem elérhető ${peerNames[remotePeerId] || remotePeerId} felé.`, 'system-message');
-            }
-        }
-
-        function sendMessage(text, targetPeerId = null) {
-            if (!text.trim()) return;
-            const messageData = { type: 'chat', text: text, senderName: myRandomName };
-
-            if (targetPeerId) {
-                sendDataChannelMessage(targetPeerId, messageData);
-                displayMessage(myRandomName + ` (-> ${peerNames[targetPeerId] || targetPeerId})`, text, 'my-message');
-            } else { // Broadcast
-                let sentToAtLeastOne = false;
-                Object.keys(dataChannels).forEach(remotePid => {
-                    if (remotePid !== localPeerId && dataChannels[remotePid] && dataChannels[remotePid].readyState === 'open') {
-                        sendDataChannelMessage(remotePid, messageData);
-                        sentToAtLeastOne = true;
-                    }
-                });
-                if (sentToAtLeastOne) {
-                    displayMessage(myRandomName + " (mindenkinek)", text, 'my-message');
-                } else if (Object.keys(dataChannels).filter(id => id !== localPeerId).length > 0) {
-                    displayMessage('SYSTEM', `Hiba: Nem sikerült az üzenetet elküldeni senkinek (csatornák nem nyitottak).`, 'system-message');
-                } else {
-                    displayMessage('SYSTEM', `Nincs aktív kapcsolat az üzenetküldéshez.`, 'system-message');
-                }
-            }
-            messageInput.value = '';
-        }
-
-        sendButton.onclick = () => { // Ez a "Küldés neki" gomb
-            const recipientId = recipientSelect.value;
-            if (recipientId && recipientId !== "") { // Ellenőrizzük, hogy van-e valós ID kiválasztva
-                sendMessage(messageInput.value, recipientId);
-            } else {
-                // Ha a recipientId üres (azaz "Mindenkinek" volt kiválasztva, de valahogy ezt a gombot nyomta meg)
-                // vagy hiba van, akkor inkább ne csináljon semmit, vagy jelezze.
-                // A gomb elvileg rejtve lenne, ha "Mindenkinek" van kiválasztva.
-                displayMessage('SYSTEM', `Válassz konkrét címzettet a listából, vagy használd a "Küldés mindenkinek" gombot.`, 'system-message');
-            }
-        };
-        sendBroadcastButton.onclick = () => sendMessage(messageInput.value, null); // Ez a "Küldés mindenkinek" gomb
-
-        messageInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter' && !e.shiftKey) { // Shift+Enter új sort kezd, sima Enter küld
-                e.preventDefault(); // Megakadályozza az új sort Enterre
-                const recipientId = recipientSelect.value;
-                if (recipientId && recipientId !== "" && !sendButton.classList.contains('hidden')) { // Ha konkrét címzett van és a gomb látható
-                    sendMessage(messageInput.value, recipientId);
-                } else if (!sendBroadcastButton.classList.contains('hidden')) { // Ha a broadcast gomb látható (azaz "Mindenkinek")
-                    sendMessage(messageInput.value, null);
-                }
-            }
-        });
-
-        function displayMessage(sender, content, type, isHtml = false, copyable = true) {
-            const msgDiv = document.createElement('div');
-            msgDiv.classList.add('message'); // Alap message osztály
-            if (typeof type === 'string') {
-                type.split(' ').forEach(cls => { if (cls) msgDiv.classList.add(cls); });
-            } else if (Array.isArray(type)) {
-                type.forEach(cls => { if (cls) msgDiv.classList.add(cls); });
-            }
-
+        function displayMessage(sender, content, className = '') {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${className}`;
+            
             const senderSpan = document.createElement('span');
             senderSpan.className = 'sender';
-            senderSpan.textContent = sender + ":"; // TextContent a biztonságért
-
-            const contentSpan = document.createElement('span');
-            contentSpan.className = 'content';
-            if (isHtml) {
-                contentSpan.innerHTML = content; // Csak ha explicit HTML
-            } else {
-                contentSpan.textContent = content;
-            }
-
-            msgDiv.appendChild(senderSpan);
-            msgDiv.appendChild(contentSpan);
-
-            if (copyable && !msgDiv.classList.contains('system-message') && !msgDiv.classList.contains('file-transfer-message') && !isHtml) {
+            senderSpan.textContent = sender;
+            
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'content';
+            contentDiv.innerHTML = content;
+            
+            messageDiv.appendChild(senderSpan);
+            messageDiv.appendChild(contentDiv);
+            
+            // Add copy button for non-system messages
+            if (!className.includes('system-message')) {
                 const copyBtn = document.createElement('button');
-                copyBtn.textContent = 'Másol';
                 copyBtn.className = 'copy-btn';
-                copyBtn.onclick = (e) => {
-                    e.stopPropagation();
-                    const textToCopy = contentSpan.textContent;
-                    if (navigator.clipboard && window.isSecureContext) {
-                        navigator.clipboard.writeText(textToCopy).then(() => {
-                            copyBtn.textContent = 'Másolva!';
-                            setTimeout(() => { copyBtn.textContent = 'Másol'; }, 1500);
-                        }).catch(err => fallbackCopyTextToClipboard(textToCopy, copyBtn));
-                    } else {
-                        fallbackCopyTextToClipboard(textToCopy, copyBtn);
-                    }
+                copyBtn.textContent = 'Copy';
+                copyBtn.onclick = function() {
+                    navigator.clipboard.writeText(content)
+                        .then(() => {
+                            copyBtn.textContent = 'Copied!';
+                            setTimeout(() => {
+                                copyBtn.textContent = 'Copy';
+                            }, 2000);
+                        })
+                        .catch(err => {
+                            console.error('Failed to copy: ', err);
+                        });
                 };
-                msgDiv.appendChild(copyBtn);
+                messageDiv.appendChild(copyBtn);
             }
-
-            messagesDiv.appendChild(msgDiv);
-            messagesDiv.scrollTop = messagesDiv.scrollHeight; // Automatikus görgetés
-
-            // Rendszerüzenetek automatikus eltüntetése
-            if (msgDiv.classList.contains('system-message')) {
-                setTimeout(() => {
-                    msgDiv.classList.add('fade-out');
-                    setTimeout(() => {
-                        if (msgDiv.parentNode) {
-                            msgDiv.parentNode.removeChild(msgDiv);
-                        }
-                    }, 500); // CSS tranzíció ideje
-                }, 7000); // Megjelenési idő (növelve)
-            }
-            return msgDiv;
+            
+            messagesDiv.appendChild(messageDiv);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            
+            return messageDiv;
         }
 
-        function fallbackCopyTextToClipboard(text, buttonElement) {
-            const textArea = document.createElement("textarea");
-            textArea.value = text;
-            textArea.style.position = 'fixed';
-            textArea.style.top = '-9999px';
-            textArea.style.left = '-9999px';
-            document.body.appendChild(textArea);
-            textArea.focus();
-            textArea.select();
-            try {
-                const successful = document.execCommand('copy');
-                if (successful && buttonElement) {
-                    buttonElement.textContent = 'Másolva!';
-                    setTimeout(() => { buttonElement.textContent = 'Másol'; }, 1500);
-                } else if (buttonElement) {
-                    buttonElement.textContent = 'Hiba';
-                }
-            } catch (err) {
-                if (buttonElement) buttonElement.textContent = 'Hiba';
-                console.error('Hiba a fallback másolás során:', err);
-            }
-            document.body.removeChild(textArea);
+        function createTransferMessage(fileId, content, className = '') {
+            const messageDiv = displayMessage('SYSTEM', content, `file-transfer-message ${className}`);
+            messageDiv.id = `transfer-${fileId}`;
+            return messageDiv;
         }
 
-        function displayMessageWithProgress(sender, initialContent, types, isHtml, messageId, progressTextId, progressBarId, initialProgress = null, buttons = []) {
-            const msgDiv = document.createElement('div');
-            msgDiv.id = messageId;
-            msgDiv.classList.add('message'); // Alap message osztály
-
-            if (Array.isArray(types)) {
-                types.forEach(cls => { if (cls) msgDiv.classList.add(cls); });
-            } else if (typeof types === 'string') {
-                types.split(' ').forEach(cls => { if (cls) msgDiv.classList.add(cls); });
+        function updateTransferMessage(fileId, content, progress = null) {
+            const messageDiv = document.getElementById(`transfer-${fileId}`);
+            if (!messageDiv) return;
+            
+            const contentDiv = messageDiv.querySelector('.content');
+            if (contentDiv) {
+                contentDiv.innerHTML = content;
             }
-
-            const senderSpan = document.createElement('span');
-            senderSpan.className = 'sender';
-            senderSpan.textContent = sender + ":";
-            msgDiv.appendChild(senderSpan);
-
-            const contentSpan = document.createElement('span');
-            contentSpan.className = 'content';
-            contentSpan.id = progressTextId; // Ez a szöveges tartalom ID-ja
-            if (isHtml) {
-                contentSpan.innerHTML = initialContent;
-            } else {
-                contentSpan.textContent = initialContent;
-            }
-            msgDiv.appendChild(contentSpan);
-
-            if (initialProgress !== null || buttons.length > 0) { // Akkor is kell a progress container, ha gombok vannak, de nincs kezdeti progress (pl. file-request)
-                const progressContainer = document.createElement('div');
-                progressContainer.className = 'progress-bar-container';
-                const progressBar = document.createElement('div');
-                progressBar.id = progressBarId;
-                progressBar.className = 'progress-bar';
-                if (initialProgress !== null) {
-                    const actualInitialProgress = Math.round(Math.max(0, Math.min(100, initialProgress)));
-                    progressBar.style.width = `${actualInitialProgress}%`;
-                    progressBar.textContent = `${actualInitialProgress}%`;
-                } else {
-                    progressBar.style.width = `0%`; // Ha nincs initial, de van container, legyen 0
-                    progressBar.textContent = ``; // Vagy `0%` ha úgy szebb
+            
+            // Update or create progress bar
+            if (progress !== null) {
+                let progressBarContainer = messageDiv.querySelector('.progress-bar-container');
+                
+                if (!progressBarContainer) {
+                    progressBarContainer = document.createElement('div');
+                    progressBarContainer.className = 'progress-bar-container';
+                    
+                    const progressBar = document.createElement('div');
+                    progressBar.className = 'progress-bar';
+                    
+                    progressBarContainer.appendChild(progressBar);
+                    contentDiv.appendChild(progressBarContainer);
                 }
-                progressContainer.appendChild(progressBar);
-                msgDiv.appendChild(progressContainer);
+                
+                const progressBar = progressBarContainer.querySelector('.progress-bar');
+                progressBar.style.width = `${progress}%`;
+                progressBar.textContent = `${Math.round(progress)}%`;
             }
-
-
-            if (buttons.length > 0) {
-                const actionsDiv = document.createElement('div');
-                actionsDiv.className = 'actions';
-                buttons.forEach(btnConfig => {
-                    const button = document.createElement('button');
-                    button.textContent = btnConfig.text;
-                    button.onclick = btnConfig.callback;
-                    actionsDiv.appendChild(button);
-                });
-                msgDiv.appendChild(actionsDiv);
-            }
-
-            messagesDiv.appendChild(msgDiv);
+            
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
         }
 
-        function updateTransferMessage(fileId, newMessageContent, progressPercent = null, statusText = null) {
-            const transfer = fileTransfers[fileId];
-            if (!transfer) return;
+        function addTransferActions(fileId, peerId, fileName) {
+            const messageDiv = document.getElementById(`transfer-${fileId}`);
+            if (!messageDiv) return;
+            
+            const contentDiv = messageDiv.querySelector('.content');
+            if (!contentDiv) return;
+            
+            // Create actions container
+            const actionsDiv = document.createElement('div');
+            actionsDiv.className = 'actions';
+            
+            // Accept button
+            const acceptBtn = document.createElement('button');
+            acceptBtn.textContent = 'Accept';
+            acceptBtn.onclick = function() {
+                acceptFile(fileId, peerId);
+                actionsDiv.remove();
+            };
+            
+            // Reject button
+            const rejectBtn = document.createElement('button');
+            rejectBtn.textContent = 'Reject';
+            rejectBtn.onclick = function() {
+                rejectFile(fileId, peerId);
+                actionsDiv.remove();
+            };
+            
+            actionsDiv.appendChild(acceptBtn);
+            actionsDiv.appendChild(rejectBtn);
+            contentDiv.appendChild(actionsDiv);
+        }
 
-            const messageElement = document.getElementById(transfer.messageElementId);
-            if (!messageElement) return;
-
-            const contentElement = document.getElementById(transfer.progressElementId); // A szöveges tartalom eleme
-            if (contentElement) {
-                let fullMessage = newMessageContent;
-                if (statusText) {
-                    fullMessage += ` <span class="status-text">(${statusText})</span>`;
-                }
-                contentElement.innerHTML = fullMessage; // Mivel HTML-t tartalmazhat (strong, a, br)
-            }
-
-            if (progressPercent !== null) {
-                updateTransferProgress(fileId, progressPercent);
-            }
-
-            // Gombok eltávolítása, ha a transzfer végleges állapotba került
-            if (statusText === "Hiba" || statusText === "Elutasítva" || statusText === "Kész") {
-                const actionsDiv = messageElement.querySelector('.actions');
-                if (actionsDiv) actionsDiv.innerHTML = ''; // Vagy actionsDiv.remove();
+        function handleFileRequest(peerId, msgData) {
+            const fileId = msgData.fileId;
+            const fileName = msgData.name;
+            const fileSize = msgData.size;
+            const senderName = peerNames[peerId] || peerId;
+            
+            fileTransfers[fileId] = {
+                peerId: peerId,
+                status: 'pending',
+                name: fileName,
+                size: fileSize
+            };
+            
+            const message = `${senderName} wants to send you a file: <strong>${fileName}</strong> (${formatFileSize(fileSize)})`;
+            createTransferMessage(fileId, message);
+            
+            // Auto-accept or show accept/reject buttons
+            if (autoAcceptFilesToggle.checked) {
+                acceptFile(fileId, peerId);
+            } else {
+                addTransferActions(fileId, peerId, fileName);
             }
         }
 
-        function updateTransferProgress(fileId, percent) {
-            const transfer = fileTransfers[fileId];
-            if (!transfer || !transfer.progressBarId) return;
-
-            const progressBar = document.getElementById(transfer.progressBarId);
-            if (progressBar) {
-                const actualPercent = Math.round(Math.max(0, Math.min(100, percent)));
-                progressBar.style.width = `${actualPercent}%`;
-                progressBar.textContent = `${actualPercent}%`;
+        function acceptFile(fileId, peerId) {
+            if (!fileTransfers[fileId] || fileTransfers[fileId].status !== 'pending') return;
+            
+            fileTransfers[fileId].status = 'approved_to_receive';
+            
+            if (dataChannels[peerId] && dataChannels[peerId].readyState === 'open') {
+                dataChannels[peerId].send(JSON.stringify({
+                    type: 'file-accept',
+                    fileId: fileId
+                }));
+                
+                updateTransferMessage(fileId, `Waiting for file transfer to start...`);
             }
         }
 
-        updatePeersList();
+        function rejectFile(fileId, peerId) {
+            if (!fileTransfers[fileId]) return;
+            
+            fileTransfers[fileId].status = 'rejected';
+            
+            if (dataChannels[peerId] && dataChannels[peerId].readyState === 'open') {
+                dataChannels[peerId].send(JSON.stringify({
+                    type: 'file-reject',
+                    fileId: fileId
+                }));
+                
+                updateTransferMessage(fileId, `File transfer rejected.`);
+            }
+        }
 
-        window.addEventListener('beforeunload', () => {
-            const byeMessagePayload = { type: 'bye', id: localPeerId };
-            Object.values(dataChannels).forEach(dc => {
-                if (dc.readyState === 'open') {
-                    try { dc.send(JSON.stringify(byeMessagePayload)); } catch (e) { }
+        function handleFileAccept(peerId, msgData) {
+            const fileId = msgData.fileId;
+            
+            if (!fileTransfers[fileId] || fileTransfers[fileId].status !== 'waiting_approval') return;
+            
+            fileTransfers[fileId].status = 'approved_to_send';
+            updateTransferMessage(fileId, `${peerNames[peerId] || peerId} accepted the file transfer. Starting...`);
+            
+            // Start sending the file
+            startFileSend(fileId, peerId);
+        }
+
+        function handleFileReject(peerId, msgData) {
+            const fileId = msgData.fileId;
+            
+            if (!fileTransfers[fileId]) return;
+            
+            fileTransfers[fileId].status = 'rejected';
+            updateTransferMessage(fileId, `${peerNames[peerId] || peerId} rejected the file transfer.`);
+            
+            // Clean up file resources
+            if (fileTransfers[fileId].file) {
+                URL.revokeObjectURL(fileTransfers[fileId].file);
+            }
+        }
+
+        function startFileSend(fileId, peerId) {
+            const transfer = fileTransfers[fileId];
+            if (!transfer || !transfer.file || transfer.status !== 'approved_to_send') return;
+            
+            const file = transfer.file;
+            const dc = dataChannels[peerId];
+            
+            if (!dc || dc.readyState !== 'open') {
+                updateTransferMessage(fileId, `Error: Connection to peer lost.`);
+                return;
+            }
+            
+            // Send file metadata
+            dc.send(JSON.stringify({
+                type: 'file-start',
+                fileId: fileId,
+                name: file.name,
+                size: file.size,
+                contentType: file.type
+            }));
+            
+            // Set up file reading and sending
+            const chunkSize = CHUNK_SIZE;
+            const reader = new FileReader();
+            let offset = 0;
+            
+            transfer.status = 'sending';
+            transfer.sentBytes = 0;
+            transfer.startTime = Date.now();
+            isFileOperationActive = true;
+            
+            const sendNextChunk = () => {
+                if (transfer.status !== 'sending') {
+                    isFileOperationActive = false;
+                    return;
                 }
-            });
-            Object.values(peerConnections).forEach(pc => pc.close());
-            if (ws && ws.readyState === WebSocket.OPEN) {
-                ws.close();
+                
+                if (offset >= file.size) {
+                    // File sending complete
+                    dc.send(JSON.stringify({
+                        type: 'file-end',
+                        fileId: fileId
+                    }));
+                    
+                    const duration = (Date.now() - transfer.startTime) / 1000;
+                    const speed = file.size / duration;
+                    
+                    updateTransferMessage(
+                        fileId, 
+                        `File <strong>${file.name}</strong> sent successfully! (${formatFileSize(file.size)} in ${duration.toFixed(1)}s, ${formatFileSize(speed)}/s)`,
+                        100
+                    );
+                    
+                    transfer.status = 'completed';
+                    URL.revokeObjectURL(file);
+                    isFileOperationActive = false;
+                    return;
+                }
+                
+                // Check if we need to throttle sending due to buffered data
+                if (dc.bufferedAmount > MAX_BUFFERED_AMOUNT_SEND_THRESHOLD) {
+                    setTimeout(sendNextChunk, 100);
+                    return;
+                }
+                
+                const slice = file.slice(offset, offset + chunkSize);
+                reader.readAsArrayBuffer(slice);
+            };
+            
+            reader.onload = (e) => {
+                if (transfer.status !== 'sending') return;
+                
+                const chunk = e.target.result;
+                dc.send(chunk);
+                
+                offset += chunk.byteLength;
+                transfer.sentBytes += chunk.byteLength;
+                
+                // Update progress
+                const progress = Math.min(100, Math.round((transfer.sentBytes / file.size) * 100));
+                updateTransferMessage(
+                    fileId, 
+                    `Sending file: <strong>${file.name}</strong> to ${peerNames[peerId] || peerId}...`,
+                    progress
+                );
+                
+                // Schedule next chunk
+                setTimeout(sendNextChunk, 0);
+            };
+            
+            reader.onerror = () => {
+                updateTransferMessage(fileId, `Error reading file: ${reader.error}`);
+                transfer.status = 'error';
+                isFileOperationActive = false;
+            };
+            
+            // Start the sending process
+            sendNextChunk();
+        }
+
+        function handleFileChunk(peerId, chunk) {
+            // Find the active file transfer for this peer
+            const fileId = Object.keys(fileTransfers).find(id => 
+                fileTransfers[id].peerId === peerId && 
+                fileTransfers[id].status === 'receiving'
+            );
+            
+            if (!fileId || !fileTransfers[fileId]) return;
+            
+            const transfer = fileTransfers[fileId];
+            
+            // Store the chunk
+            transfer.chunks.push(chunk);
+            transfer.receivedBytes += chunk.byteLength;
+            
+            // Update progress
+            const progress = Math.min(100, Math.round((transfer.receivedBytes / transfer.meta.size) * 100));
+            updateTransferMessage(
+                fileId, 
+                `Receiving file: <strong>${transfer.meta.name}</strong> from ${peerNames[peerId] || peerId}...`,
+                progress
+            );
+        }
+
+        function handleFileEnd(peerId, msgData) {
+            const fileId = msgData.fileId;
+            
+            if (!fileTransfers[fileId] || fileTransfers[fileId].status !== 'receiving') return;
+            
+            const transfer = fileTransfers[fileId];
+            
+            // Combine all chunks into a single blob
+            const blob = new Blob(transfer.chunks, { type: transfer.meta.contentType || 'application/octet-stream' });
+            
+            // Create download link
+            const url = URL.createObjectURL(blob);
+            const fileName = transfer.meta.name;
+            
+            const downloadLink = `<a href="${url}" download="${fileName}" target="_blank">Download ${fileName}</a>`;
+            updateTransferMessage(fileId, `File received successfully! ${downloadLink}`, 100);
+            
+            // Clean up
+            transfer.status = 'completed';
+            delete transfer.chunks;
+            isFileOperationActive = false;
+        }
+
+        // File selection and sending
+        function selectFile(peerId) {
+            const input = document.createElement('input');
+            input.type = 'file';
+            
+            input.onchange = (e) => {
+                if (!e.target.files.length) return;
+                
+                const file = e.target.files[0];
+                const fileId = generateFileId();
+                
+                // Create file transfer record
+                fileTransfers[fileId] = {
+                    file: file,
+                    peerId: peerId,
+                    status: 'waiting_approval'
+                };
+                
+                // Display message about file request
+                createTransferMessage(
+                    fileId, 
+                    `Requesting to send file: <strong>${file.name}</strong> (${formatFileSize(file.size)}) to ${peerNames[peerId] || peerId}...`
+                );
+                
+                // Send file request to peer
+                if (dataChannels[peerId] && dataChannels[peerId].readyState === 'open') {
+                    dataChannels[peerId].send(JSON.stringify({
+                        type: 'file-request',
+                        fileId: fileId,
+                        name: file.name,
+                        size: file.size
+                    }));
+                } else {
+                    updateTransferMessage(fileId, `Error: Connection to peer lost.`);
+                }
+            };
+            
+            input.click();
+        }
+
+        // UI Event Handlers
+        window.selectPeer = function(peerId) {
+            recipientSelect.value = peerId;
+            recipientSelect.classList.remove('hidden');
+            sendButton.classList.remove('hidden');
+            messageInput.focus();
+        };
+
+        sendButton.addEventListener('click', () => {
+            const text = messageInput.value.trim();
+            if (!text) return;
+            
+            const selectedPeerId = recipientSelect.value;
+            if (selectedPeerId === 'broadcast') {
+                sendBroadcastMessage(text);
+            } else {
+                sendDirectMessage(selectedPeerId, text);
+            }
+            
+            messageInput.value = '';
+        });
+
+        sendBroadcastButton.addEventListener('click', () => {
+            const text = messageInput.value.trim();
+            if (!text) return;
+            
+            sendBroadcastMessage(text);
+            messageInput.value = '';
+        });
+
+        messageInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                if (!recipientSelect.classList.contains('hidden')) {
+                    sendButton.click();
+                } else {
+                    sendBroadcastButton.click();
+                }
             }
         });
+
+        function sendDirectMessage(peerId, text) {
+            if (!dataChannels[peerId] || dataChannels[peerId].readyState !== 'open') {
+                displayMessage('SYSTEM', `Cannot send message: Peer connection is not open.`, 'system-message');
+                return;
+            }
+            
+            dataChannels[peerId].send(JSON.stringify({
+                type: 'chat',
+                text: text
+            }));
+            
+            displayMessage(`You → ${peerNames[peerId] || peerId}`, text, 'my-message');
+        }
+
+        function sendBroadcastMessage(text) {
+            const connectedPeers = Object.keys(dataChannels).filter(id => 
+                dataChannels[id] && dataChannels[id].readyState === 'open'
+            );
+            
+            if (connectedPeers.length === 0) {
+                displayMessage('SYSTEM', `Cannot send message: No connected peers.`, 'system-message');
+                return;
+            }
+            
+            connectedPeers.forEach(peerId => {
+                dataChannels[peerId].send(JSON.stringify({
+                    type: 'chat',
+                    text: text
+                }));
+            });
+            
+            displayMessage(`You → Everyone`, text, 'my-message');
+        }
+
+        // Add file sharing to peer context menu
+        document.addEventListener('click', function(e) {
+            if (e.target && e.target.tagName === 'BUTTON' && e.target.textContent === 'Chat') {
+                const peerItem = e.target.closest('.peer');
+                if (peerItem) {
+                    const peerSpan = peerItem.querySelector('span');
+                    const peerName = peerSpan.textContent;
+                    const peerId = e.target.onclick.toString().match(/'([^']+)'/)[1];
+                    
+                    // Add file button if it doesn't exist
+                    if (!peerItem.querySelector('.file-btn')) {
+                        const fileBtn = document.createElement('button');
+                        fileBtn.className = 'file-btn';
+                        fileBtn.textContent = 'Send File';
+                        fileBtn.onclick = function() {
+                            selectFile(peerId);
+                        };
+                        peerItem.appendChild(fileBtn);
+                    }
+                }
+            }
+        });
+
+        // Enhanced mobile device detection
+        if (isMobileDevice()) {
+            document.body.classList.add('mobile-device');
+            console.log('Mobile device detected, enabling optimizations');
+        }
     </script>
 </body>
 
