@@ -454,25 +454,25 @@
             align-items: center;
             margin-top: 10px;
         }
-        
+
         .auto-accept-files span {
             margin-left: 10px;
             font-size: 0.9em;
         }
-        
+
         .toggle-switch {
             position: relative;
             display: inline-block;
             width: 50px;
             height: 24px;
         }
-        
+
         .toggle-switch input {
             opacity: 0;
             width: 0;
             height: 0;
         }
-        
+
         .toggle-slider {
             position: absolute;
             cursor: pointer;
@@ -484,7 +484,7 @@
             transition: .4s;
             border-radius: 24px;
         }
-        
+
         .toggle-slider:before {
             position: absolute;
             content: "";
@@ -496,16 +496,16 @@
             transition: .4s;
             border-radius: 50%;
         }
-        
-        input:checked + .toggle-slider {
+
+        input:checked+.toggle-slider {
             background-color: var(--success-color);
         }
-        
-        input:focus + .toggle-slider {
+
+        input:focus+.toggle-slider {
             box-shadow: 0 0 1px var(--success-color);
         }
-        
-        input:checked + .toggle-slider:before {
+
+        input:checked+.toggle-slider:before {
             transform: translateX(26px);
         }
 
@@ -515,10 +515,16 @@
                 align-items: flex-start;
             }
 
+            .peer div {
+                display: flex;
+                width: 100%;
+                gap: 8px;
+                margin-top: 8px;
+            }
+
             .peer button {
                 margin-left: 0;
-                margin-top: 8px;
-                width: 100%;
+                flex: 1;
             }
 
             h1 {
@@ -528,7 +534,7 @@
             h2 {
                 font-size: 1.2em;
             }
-            
+
             .auto-accept-files {
                 margin-top: 15px;
             }
@@ -543,7 +549,8 @@
         <div class="app-info section">
             <p>Your name: <span id="myName">Generating...</span> (<span id="myPeerId"></span>)</p>
             <p>Signaling server: <code id="signalingServerAddress">ws://192.168.0.251:8080</code></p>
-            <p style="font-size:0.9em; color: var(--muted-text-color);">Messages and files are transmitted directly between peers (P2P) after the connection is established.</p>
+            <p style="font-size:0.9em; color: var(--muted-text-color);">Messages and files are transmitted directly
+                between peers (P2P) after the connection is established.</p>
             <div class="auto-accept-files">
                 <label class="toggle-switch">
                     <input type="checkbox" id="autoAcceptFiles" checked>
@@ -583,14 +590,14 @@
         const recipientSelect = document.getElementById('recipientSelect');
         const signalingServerAddressSpan = document.getElementById('signalingServerAddress');
         const autoAcceptFilesToggle = document.getElementById('autoAcceptFiles');
-        
+
         // Load saved auto-accept preference from localStorage
         if (localStorage.getItem('autoAcceptFiles') === 'false') {
             autoAcceptFilesToggle.checked = false;
         }
-        
+
         // Save auto-accept preference when changed
-        autoAcceptFilesToggle.addEventListener('change', function() {
+        autoAcceptFilesToggle.addEventListener('change', function () {
             localStorage.setItem('autoAcceptFiles', this.checked);
             console.log(`Auto-accept files: ${this.checked ? 'enabled' : 'disabled'}`);
         });
@@ -685,7 +692,7 @@
 
                         // Use enhanced peer discovery for mobile-to-mobile connections
                         enhancedPeerDiscovery(message.id, message.deviceType);
-                        
+
                         // Update the peer list to show the new peer immediately
                         updatePeersList();
                     }
@@ -790,6 +797,12 @@
 
             dc.onopen = () => {
                 console.log(`Data channel open with ${remotePeerId} (${peerNames[remotePeerId]}).`);
+
+                // Immediately request peer's name when channel opens
+                dc.send(JSON.stringify({
+                    type: 'name-request'
+                }));
+
                 displayMessage('SYSTEM', `${peerNames[remotePeerId] || remotePeerId} joined the chat.`, 'system-message');
                 updatePeersList();
             };
@@ -842,7 +855,9 @@
                             case 'name-response':
                                 // Peer sent their name
                                 if (msgData.name) {
+                                    console.log(`Received name from peer ${remotePeerId}: ${msgData.name}`);
                                     peerNames[remotePeerId] = msgData.name;
+                                    // Force update the peer list to show the correct name
                                     updatePeersList();
                                 }
                                 break;
@@ -915,26 +930,26 @@
             // Attempt connection with exponential backoff
             const attemptConnection = async () => {
                 connectionAttempts[peerId]++;
-                
+
                 if (connectionAttempts[peerId] > connectionRetryConfig.maxRetries) {
                     logPeerDiscovery('error', `Connection failed after ${connectionAttempts[peerId] - 1} attempts`, peerId);
                     return;
                 }
 
                 logPeerDiscovery('info', `Connection attempt ${connectionAttempts[peerId]}/${connectionRetryConfig.maxRetries}`, peerId);
-                
+
                 try {
                     const pc = await createPeerConnection(peerId);
                     if (!pc) return;
-                    
+
                     // Create data channel
                     const dc = pc.createDataChannel(`chat-${Date.now()}`);
                     setupDataChannel(peerId, dc);
-                    
+
                     // Create and send offer
                     const offer = await pc.createOffer();
                     await pc.setLocalDescription(offer);
-                    
+
                     // Send offer with additional metadata
                     sendSignalingMessage(peerId, {
                         sdp: pc.localDescription,
@@ -942,20 +957,20 @@
                         deviceType: isMobileDevice() ? 'mobile' : 'desktop',
                         attempt: connectionAttempts[peerId]
                     });
-                    
+
                 } catch (err) {
                     logPeerDiscovery('error', `Error creating connection: ${err.message}`, peerId);
-                    
+
                     // Schedule retry with exponential backoff
                     const delay = Math.min(
                         connectionRetryConfig.baseDelay * Math.pow(connectionRetryConfig.backoffMultiplier, connectionAttempts[peerId] - 1),
                         connectionRetryConfig.maxDelay
                     );
-                    
+
                     connectionTimeouts[peerId] = setTimeout(attemptConnection, delay);
                 }
             };
-            
+
             // Start connection process
             attemptConnection();
         }
@@ -963,22 +978,22 @@
         async function handleOffer(peerId, sdp, peerName, deviceType, attempt) {
             try {
                 peerNames[peerId] = peerName;
-                
+
                 const pc = await createPeerConnection(peerId);
                 if (!pc) return;
-                
+
                 await pc.setRemoteDescription(new RTCSessionDescription(sdp));
                 const answer = await pc.createAnswer();
                 await pc.setLocalDescription(answer);
-                
+
                 sendSignalingMessage(peerId, {
                     sdp: pc.localDescription,
                     name: myRandomName,
                     deviceType: isMobileDevice() ? 'mobile' : 'desktop'
                 });
-                
+
                 updatePeersList();
-                
+
             } catch (err) {
                 console.error(`Error handling offer from ${peerId}:`, err);
             }
@@ -1014,37 +1029,37 @@
                 }
                 delete dataChannels[peerId];
             }
-            
+
             if (peerConnections[peerId]) {
                 peerConnections[peerId].close();
                 delete peerConnections[peerId];
             }
-            
+
             // Clean up keep-alive interval
             if (keepAliveIntervals[peerId]) {
                 clearInterval(keepAliveIntervals[peerId]);
                 delete keepAliveIntervals[peerId];
             }
-            
+
             // Clean up connection attempts
             delete connectionAttempts[peerId];
             if (connectionTimeouts[peerId]) {
                 clearTimeout(connectionTimeouts[peerId]);
                 delete connectionTimeouts[peerId];
             }
-            
+
             // Display disconnect message if we had a name (meaning connection was established)
             if (peerNames[peerId] && !peerNames[peerId].startsWith('Connecting')) {
                 displayMessage('SYSTEM', `${peerNames[peerId]} disconnected.`, 'system-message');
             }
-            
+
             // Keep the name for a while in case they reconnect
             setTimeout(() => {
                 if (!peerConnections[peerId]) {
                     delete peerNames[peerId];
                 }
             }, 60000); // Remove name after 1 minute if no reconnection
-            
+
             updatePeersList();
         }
 
@@ -1058,14 +1073,14 @@
         }
 
         function updatePeersList() {
-            const connectedPeers = Object.keys(dataChannels).filter(peerId => 
+            const connectedPeers = Object.keys(dataChannels).filter(peerId =>
                 dataChannels[peerId] && dataChannels[peerId].readyState === 'open'
             );
-            
-            const connectingPeers = Object.keys(peerConnections).filter(peerId => 
+
+            const connectingPeers = Object.keys(peerConnections).filter(peerId =>
                 !dataChannels[peerId] || dataChannels[peerId].readyState !== 'open'
             );
-            
+
             if (connectedPeers.length === 0 && connectingPeers.length === 0) {
                 peersContainer.innerHTML = '<p>No peers available at the moment.</p>';
                 recipientSelect.innerHTML = '';
@@ -1073,22 +1088,30 @@
                 sendButton.classList.add('hidden');
                 return;
             }
-            
+
             let html = '<ul>';
             let selectHtml = '<option value="broadcast">Everyone</option>';
-            
+
             // First show connected peers
             connectedPeers.forEach(peerId => {
-                const peerName = peerNames[peerId] || peerId;
+                // Fix Bug 1: Use the actual peer name, not "Connecting ID"
+                const peerName = peerNames[peerId] && !peerNames[peerId].startsWith('Connecting') ?
+                    peerNames[peerId] :
+                    `Peer (${peerId.substring(0, 6)})`;
+
+                // Fix Bug 2: Add Send File button alongside Chat button
                 html += `
                     <li class="peer">
                         <span>${peerName}</span>
-                        <button onclick="selectPeer('${peerId}')">Chat</button>
+                        <div>
+                            <button onclick="selectPeer('${peerId}')">Chat</button>
+                            <button onclick="selectFile('${peerId}')">Send File</button>
+                        </div>
                     </li>
                 `;
                 selectHtml += `<option value="${peerId}">${peerName}</option>`;
             });
-            
+
             // Then show connecting peers
             connectingPeers.forEach(peerId => {
                 const peerName = peerNames[peerId] || `Unknown (${peerId.substring(0, 6)}...)`;
@@ -1098,7 +1121,7 @@
                     </li>
                 `;
             });
-            
+
             html += '</ul>';
             peersContainer.innerHTML = html;
             recipientSelect.innerHTML = selectHtml;
@@ -1107,24 +1130,24 @@
         function displayMessage(sender, content, className = '') {
             const messageDiv = document.createElement('div');
             messageDiv.className = `message ${className}`;
-            
+
             const senderSpan = document.createElement('span');
             senderSpan.className = 'sender';
             senderSpan.textContent = sender;
-            
+
             const contentDiv = document.createElement('div');
             contentDiv.className = 'content';
             contentDiv.innerHTML = content;
-            
+
             messageDiv.appendChild(senderSpan);
             messageDiv.appendChild(contentDiv);
-            
+
             // Add copy button for non-system messages
             if (!className.includes('system-message')) {
                 const copyBtn = document.createElement('button');
                 copyBtn.className = 'copy-btn';
                 copyBtn.textContent = 'Copy';
-                copyBtn.onclick = function() {
+                copyBtn.onclick = function () {
                     navigator.clipboard.writeText(content)
                         .then(() => {
                             copyBtn.textContent = 'Copied!';
@@ -1138,10 +1161,10 @@
                 };
                 messageDiv.appendChild(copyBtn);
             }
-            
+
             messagesDiv.appendChild(messageDiv);
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
-            
+
             return messageDiv;
         }
 
@@ -1154,62 +1177,62 @@
         function updateTransferMessage(fileId, content, progress = null) {
             const messageDiv = document.getElementById(`transfer-${fileId}`);
             if (!messageDiv) return;
-            
+
             const contentDiv = messageDiv.querySelector('.content');
             if (contentDiv) {
                 contentDiv.innerHTML = content;
             }
-            
+
             // Update or create progress bar
             if (progress !== null) {
                 let progressBarContainer = messageDiv.querySelector('.progress-bar-container');
-                
+
                 if (!progressBarContainer) {
                     progressBarContainer = document.createElement('div');
                     progressBarContainer.className = 'progress-bar-container';
-                    
+
                     const progressBar = document.createElement('div');
                     progressBar.className = 'progress-bar';
-                    
+
                     progressBarContainer.appendChild(progressBar);
                     contentDiv.appendChild(progressBarContainer);
                 }
-                
+
                 const progressBar = progressBarContainer.querySelector('.progress-bar');
                 progressBar.style.width = `${progress}%`;
                 progressBar.textContent = `${Math.round(progress)}%`;
             }
-            
+
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
         }
 
         function addTransferActions(fileId, peerId, fileName) {
             const messageDiv = document.getElementById(`transfer-${fileId}`);
             if (!messageDiv) return;
-            
+
             const contentDiv = messageDiv.querySelector('.content');
             if (!contentDiv) return;
-            
+
             // Create actions container
             const actionsDiv = document.createElement('div');
             actionsDiv.className = 'actions';
-            
+
             // Accept button
             const acceptBtn = document.createElement('button');
             acceptBtn.textContent = 'Accept';
-            acceptBtn.onclick = function() {
+            acceptBtn.onclick = function () {
                 acceptFile(fileId, peerId);
                 actionsDiv.remove();
             };
-            
+
             // Reject button
             const rejectBtn = document.createElement('button');
             rejectBtn.textContent = 'Reject';
-            rejectBtn.onclick = function() {
+            rejectBtn.onclick = function () {
                 rejectFile(fileId, peerId);
                 actionsDiv.remove();
             };
-            
+
             actionsDiv.appendChild(acceptBtn);
             actionsDiv.appendChild(rejectBtn);
             contentDiv.appendChild(actionsDiv);
@@ -1220,17 +1243,17 @@
             const fileName = msgData.name;
             const fileSize = msgData.size;
             const senderName = peerNames[peerId] || peerId;
-            
+
             fileTransfers[fileId] = {
                 peerId: peerId,
                 status: 'pending',
                 name: fileName,
                 size: fileSize
             };
-            
+
             const message = `${senderName} wants to send you a file: <strong>${fileName}</strong> (${formatFileSize(fileSize)})`;
             createTransferMessage(fileId, message);
-            
+
             // Auto-accept or show accept/reject buttons
             if (autoAcceptFilesToggle.checked) {
                 acceptFile(fileId, peerId);
@@ -1241,54 +1264,54 @@
 
         function acceptFile(fileId, peerId) {
             if (!fileTransfers[fileId] || fileTransfers[fileId].status !== 'pending') return;
-            
+
             fileTransfers[fileId].status = 'approved_to_receive';
-            
+
             if (dataChannels[peerId] && dataChannels[peerId].readyState === 'open') {
                 dataChannels[peerId].send(JSON.stringify({
                     type: 'file-accept',
                     fileId: fileId
                 }));
-                
+
                 updateTransferMessage(fileId, `Waiting for file transfer to start...`);
             }
         }
 
         function rejectFile(fileId, peerId) {
             if (!fileTransfers[fileId]) return;
-            
+
             fileTransfers[fileId].status = 'rejected';
-            
+
             if (dataChannels[peerId] && dataChannels[peerId].readyState === 'open') {
                 dataChannels[peerId].send(JSON.stringify({
                     type: 'file-reject',
                     fileId: fileId
                 }));
-                
+
                 updateTransferMessage(fileId, `File transfer rejected.`);
             }
         }
 
         function handleFileAccept(peerId, msgData) {
             const fileId = msgData.fileId;
-            
+
             if (!fileTransfers[fileId] || fileTransfers[fileId].status !== 'waiting_approval') return;
-            
+
             fileTransfers[fileId].status = 'approved_to_send';
             updateTransferMessage(fileId, `${peerNames[peerId] || peerId} accepted the file transfer. Starting...`);
-            
+
             // Start sending the file
             startFileSend(fileId, peerId);
         }
 
         function handleFileReject(peerId, msgData) {
             const fileId = msgData.fileId;
-            
+
             if (!fileTransfers[fileId]) return;
-            
+
             fileTransfers[fileId].status = 'rejected';
             updateTransferMessage(fileId, `${peerNames[peerId] || peerId} rejected the file transfer.`);
-            
+
             // Clean up file resources
             if (fileTransfers[fileId].file) {
                 URL.revokeObjectURL(fileTransfers[fileId].file);
@@ -1298,15 +1321,15 @@
         function startFileSend(fileId, peerId) {
             const transfer = fileTransfers[fileId];
             if (!transfer || !transfer.file || transfer.status !== 'approved_to_send') return;
-            
+
             const file = transfer.file;
             const dc = dataChannels[peerId];
-            
+
             if (!dc || dc.readyState !== 'open') {
                 updateTransferMessage(fileId, `Error: Connection to peer lost.`);
                 return;
             }
-            
+
             // Send file metadata
             dc.send(JSON.stringify({
                 type: 'file-start',
@@ -1315,105 +1338,105 @@
                 size: file.size,
                 contentType: file.type
             }));
-            
+
             // Set up file reading and sending
             const chunkSize = CHUNK_SIZE;
             const reader = new FileReader();
             let offset = 0;
-            
+
             transfer.status = 'sending';
             transfer.sentBytes = 0;
             transfer.startTime = Date.now();
             isFileOperationActive = true;
-            
+
             const sendNextChunk = () => {
                 if (transfer.status !== 'sending') {
                     isFileOperationActive = false;
                     return;
                 }
-                
+
                 if (offset >= file.size) {
                     // File sending complete
                     dc.send(JSON.stringify({
                         type: 'file-end',
                         fileId: fileId
                     }));
-                    
+
                     const duration = (Date.now() - transfer.startTime) / 1000;
                     const speed = file.size / duration;
-                    
+
                     updateTransferMessage(
-                        fileId, 
+                        fileId,
                         `File <strong>${file.name}</strong> sent successfully! (${formatFileSize(file.size)} in ${duration.toFixed(1)}s, ${formatFileSize(speed)}/s)`,
                         100
                     );
-                    
+
                     transfer.status = 'completed';
                     URL.revokeObjectURL(file);
                     isFileOperationActive = false;
                     return;
                 }
-                
+
                 // Check if we need to throttle sending due to buffered data
                 if (dc.bufferedAmount > MAX_BUFFERED_AMOUNT_SEND_THRESHOLD) {
                     setTimeout(sendNextChunk, 100);
                     return;
                 }
-                
+
                 const slice = file.slice(offset, offset + chunkSize);
                 reader.readAsArrayBuffer(slice);
             };
-            
+
             reader.onload = (e) => {
                 if (transfer.status !== 'sending') return;
-                
+
                 const chunk = e.target.result;
                 dc.send(chunk);
-                
+
                 offset += chunk.byteLength;
                 transfer.sentBytes += chunk.byteLength;
-                
+
                 // Update progress
                 const progress = Math.min(100, Math.round((transfer.sentBytes / file.size) * 100));
                 updateTransferMessage(
-                    fileId, 
+                    fileId,
                     `Sending file: <strong>${file.name}</strong> to ${peerNames[peerId] || peerId}...`,
                     progress
                 );
-                
+
                 // Schedule next chunk
                 setTimeout(sendNextChunk, 0);
             };
-            
+
             reader.onerror = () => {
                 updateTransferMessage(fileId, `Error reading file: ${reader.error}`);
                 transfer.status = 'error';
                 isFileOperationActive = false;
             };
-            
+
             // Start the sending process
             sendNextChunk();
         }
 
         function handleFileChunk(peerId, chunk) {
             // Find the active file transfer for this peer
-            const fileId = Object.keys(fileTransfers).find(id => 
-                fileTransfers[id].peerId === peerId && 
+            const fileId = Object.keys(fileTransfers).find(id =>
+                fileTransfers[id].peerId === peerId &&
                 fileTransfers[id].status === 'receiving'
             );
-            
+
             if (!fileId || !fileTransfers[fileId]) return;
-            
+
             const transfer = fileTransfers[fileId];
-            
+
             // Store the chunk
             transfer.chunks.push(chunk);
             transfer.receivedBytes += chunk.byteLength;
-            
+
             // Update progress
             const progress = Math.min(100, Math.round((transfer.receivedBytes / transfer.meta.size) * 100));
             updateTransferMessage(
-                fileId, 
+                fileId,
                 `Receiving file: <strong>${transfer.meta.name}</strong> from ${peerNames[peerId] || peerId}...`,
                 progress
             );
@@ -1421,21 +1444,42 @@
 
         function handleFileEnd(peerId, msgData) {
             const fileId = msgData.fileId;
-            
+
             if (!fileTransfers[fileId] || fileTransfers[fileId].status !== 'receiving') return;
-            
+
             const transfer = fileTransfers[fileId];
-            
+
             // Combine all chunks into a single blob
             const blob = new Blob(transfer.chunks, { type: transfer.meta.contentType || 'application/octet-stream' });
-            
+
             // Create download link
             const url = URL.createObjectURL(blob);
             const fileName = transfer.meta.name;
-            
-            const downloadLink = `<a href="${url}" download="${fileName}" target="_blank">Download ${fileName}</a>`;
-            updateTransferMessage(fileId, `File received successfully! ${downloadLink}`, 100);
-            
+
+            // Create a download link element
+            const downloadLink = document.createElement('a');
+            downloadLink.href = url;
+            downloadLink.download = fileName;
+            downloadLink.textContent = `Download ${fileName}`;
+            downloadLink.target = "_blank";
+
+            // Add the link to the message
+            updateTransferMessage(fileId, `File received successfully! `, 100);
+
+            // Append the link to the message
+            const messageDiv = document.getElementById(`transfer-${fileId}`);
+            if (messageDiv) {
+                const contentDiv = messageDiv.querySelector('.content');
+                if (contentDiv) {
+                    contentDiv.appendChild(downloadLink);
+                }
+            }
+
+            // Automatically trigger download
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+
             // Clean up
             transfer.status = 'completed';
             delete transfer.chunks;
@@ -1446,26 +1490,26 @@
         function selectFile(peerId) {
             const input = document.createElement('input');
             input.type = 'file';
-            
+
             input.onchange = (e) => {
                 if (!e.target.files.length) return;
-                
+
                 const file = e.target.files[0];
                 const fileId = generateFileId();
-                
+
                 // Create file transfer record
                 fileTransfers[fileId] = {
                     file: file,
                     peerId: peerId,
                     status: 'waiting_approval'
                 };
-                
+
                 // Display message about file request
                 createTransferMessage(
-                    fileId, 
+                    fileId,
                     `Requesting to send file: <strong>${file.name}</strong> (${formatFileSize(file.size)}) to ${peerNames[peerId] || peerId}...`
                 );
-                
+
                 // Send file request to peer
                 if (dataChannels[peerId] && dataChannels[peerId].readyState === 'open') {
                     dataChannels[peerId].send(JSON.stringify({
@@ -1478,12 +1522,12 @@
                     updateTransferMessage(fileId, `Error: Connection to peer lost.`);
                 }
             };
-            
+
             input.click();
         }
 
         // UI Event Handlers
-        window.selectPeer = function(peerId) {
+        window.selectPeer = function (peerId) {
             recipientSelect.value = peerId;
             recipientSelect.classList.remove('hidden');
             sendButton.classList.remove('hidden');
@@ -1493,21 +1537,21 @@
         sendButton.addEventListener('click', () => {
             const text = messageInput.value.trim();
             if (!text) return;
-            
+
             const selectedPeerId = recipientSelect.value;
             if (selectedPeerId === 'broadcast') {
                 sendBroadcastMessage(text);
             } else {
                 sendDirectMessage(selectedPeerId, text);
             }
-            
+
             messageInput.value = '';
         });
 
         sendBroadcastButton.addEventListener('click', () => {
             const text = messageInput.value.trim();
             if (!text) return;
-            
+
             sendBroadcastMessage(text);
             messageInput.value = '';
         });
@@ -1527,50 +1571,50 @@
                 displayMessage('SYSTEM', `Cannot send message: Peer connection is not open.`, 'system-message');
                 return;
             }
-            
+
             dataChannels[peerId].send(JSON.stringify({
                 type: 'chat',
                 text: text
             }));
-            
+
             displayMessage(`You → ${peerNames[peerId] || peerId}`, text, 'my-message');
         }
 
         function sendBroadcastMessage(text) {
-            const connectedPeers = Object.keys(dataChannels).filter(id => 
+            const connectedPeers = Object.keys(dataChannels).filter(id =>
                 dataChannels[id] && dataChannels[id].readyState === 'open'
             );
-            
+
             if (connectedPeers.length === 0) {
                 displayMessage('SYSTEM', `Cannot send message: No connected peers.`, 'system-message');
                 return;
             }
-            
+
             connectedPeers.forEach(peerId => {
                 dataChannels[peerId].send(JSON.stringify({
                     type: 'chat',
                     text: text
                 }));
             });
-            
+
             displayMessage(`You → Everyone`, text, 'my-message');
         }
 
         // Add file sharing to peer context menu
-        document.addEventListener('click', function(e) {
+        document.addEventListener('click', function (e) {
             if (e.target && e.target.tagName === 'BUTTON' && e.target.textContent === 'Chat') {
                 const peerItem = e.target.closest('.peer');
                 if (peerItem) {
                     const peerSpan = peerItem.querySelector('span');
                     const peerName = peerSpan.textContent;
                     const peerId = e.target.onclick.toString().match(/'([^']+)'/)[1];
-                    
+
                     // Add file button if it doesn't exist
                     if (!peerItem.querySelector('.file-btn')) {
                         const fileBtn = document.createElement('button');
                         fileBtn.className = 'file-btn';
                         fileBtn.textContent = 'Send File';
-                        fileBtn.onclick = function() {
+                        fileBtn.onclick = function () {
                             selectFile(peerId);
                         };
                         peerItem.appendChild(fileBtn);
